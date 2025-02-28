@@ -13,7 +13,7 @@ export const Realtime: FC<PropsWithChildren<{
     useEffect(() => {
         const subscription = channel.on("broadcast", {event: "*"}, (payload) => {
             console.log(payload)
-            setMessages(messages => [...messages, payload]);
+            setMessages(messages => [...messages, {...payload, timestamp: Date.now()}]);
         });
         subscription.subscribe()
         return () => {
@@ -27,7 +27,7 @@ export const Realtime: FC<PropsWithChildren<{
                 type: "broadcast",
                 event,
                 payload
-            }).then(() => setMessages([...messages, {event, ...payload}]))
+            }).then(() => setMessages([...messages, {event, ...payload, outgoing: true, timestamp: Date.now()}]))
         }
     }}>
         {children}

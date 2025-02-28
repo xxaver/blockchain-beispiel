@@ -1,8 +1,7 @@
 import {FC} from "react";
 import {useParams} from "react-router";
 import {Realtime} from "../handlers/Realtime.tsx";
-import {RawMessageList} from "../components/RawMessageView.tsx";
-import {RealtimeTest} from "../RealtimeTest.tsx";
+import {RawMessageList} from "../components/RawMessageList/RawMessageList.tsx";
 
 export const Main: FC = () => {
     const {key, url} = useParams()
@@ -15,7 +14,6 @@ export const Main: FC = () => {
             </div>
             <div className="flex grow min-h-0">
                 <div className="grow">
-                    <RealtimeTest/>
                 </div>
                 <RawMessageList/>
             </div>

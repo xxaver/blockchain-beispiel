@@ -7,5 +7,7 @@ export const RealtimeContext = createContext<{
     channel: RealtimeChannel;
 } | null>(null);
 export type Message = object & {
+    outgoing?: boolean;
+    timestamp: number;
     event: string;
 }
