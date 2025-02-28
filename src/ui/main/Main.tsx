@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {useParams} from "react-router";
-import {Realtime} from "../handlers/Realtime.tsx";
+import {Realtime} from "../components/Realtime/Realtime.tsx";
 import {RawMessageList} from "../components/RawMessageList/RawMessageList.tsx";
 
 export const Main: FC = () => {

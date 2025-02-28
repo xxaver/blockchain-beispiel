@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
 import {ArrowUpRight, Box, Coins, ShieldX} from "lucide-react";
-import {Message} from "../../handlers/RealtimeContext.tsx";
+import {Message} from "../Realtime/RealtimeContext.ts";
 import {wholeJson} from "./util.ts";
 
 const knownEvents: {

@@ -1,6 +1,6 @@
 import {createClient} from "@supabase/supabase-js";
 import {FC, PropsWithChildren, useContext, useEffect, useMemo, useState} from "react";
-import {Message, RealtimeContext} from "./RealtimeContext.tsx";
+import {Message, RealtimeContext} from "./RealtimeContext.ts";
 
 export const Realtime: FC<PropsWithChildren<{
     baseURL: string;
