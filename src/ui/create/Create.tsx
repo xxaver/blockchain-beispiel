@@ -1,14 +1,16 @@
 import {FC, useCallback, useEffect, useState} from "react";
 import QRCode from 'qrcode';
 import {basePath} from "../config.ts";
+import {Link} from "react-router";
 
-export const Start: FC = () => {
+export const Create: FC = () => {
     const [baseURL, setBaseURL] = useState("")
     const [anonKey, setAnonKey] = useState("")
 
     const [qrCode, setQRCode] = useState<string | null>(null)
     
-    const url = `${location.origin}${basePath}/${encodeURIComponent(baseURL)}/${encodeURIComponent(anonKey)}`
+    const normalUrl = `/${encodeURIComponent(baseURL)}/${encodeURIComponent(anonKey)}`
+    const url = `${location.origin}${basePath}${normalUrl}`
 
     const generateQRCode = useCallback(async (input: string) => {
         if (!input) {
@@ -50,7 +52,7 @@ export const Start: FC = () => {
             <input placeholder="Supabase Base URL" type="text" onChange={e => setBaseURL(e.target.value)}
                    value={baseURL}/>
             <input placeholder="Anon Key" type="text" onChange={e => setAnonKey(e.target.value)} value={anonKey}/>
-            <a className="primary" href={url}>Öffnen</a>
+            <Link className="primary" to={normalUrl}>Öffnen</Link>
         </div>
     </div>
 }

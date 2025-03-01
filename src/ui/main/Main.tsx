@@ -1,4 +1,4 @@
-import {FC, Fragment, useState} from "react";
+import {FC, Fragment, useEffect, useState} from "react";
 import {useParams} from "react-router";
 import {Realtime} from "../handlers/Realtime/Realtime.tsx";
 import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
@@ -15,6 +15,10 @@ const areas = [
 export const Main: FC = () => {
     const {key, url} = useParams()
     const [hidden, setHidden] = useState<number[]>([]);
+
+    useEffect(() => {
+        localStorage.setItem("default", JSON.stringify({key, url}));
+    }, [key, url]);
 
     return <Realtime baseURL={url!} anonKey={key!}>
         <Users>
