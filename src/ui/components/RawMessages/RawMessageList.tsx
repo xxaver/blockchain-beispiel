@@ -1,6 +1,6 @@
 import {FC, useContext, useEffect, useRef, useState} from "react";
 
-import {Message, RealtimeContext} from "../Realtime/RealtimeContext.ts";
+import {Message, RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {ArrowDown, Network, Plus} from "lucide-react";
 import {NewMessage} from "./NewMessage.tsx";
 import {RawMessageView} from "./RawMessageView.tsx";

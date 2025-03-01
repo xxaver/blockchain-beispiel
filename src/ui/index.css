@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 body, html, #root {
@@ -16,14 +14,14 @@ input {
   transition: all .2s;
 }
 input:focus {
-  box-shadow: rgba(0, 72, 255, 0.4) 0 0 20px 0;
-  border-color: #0048ff;
+  @apply border-blue-700;
   outline: none;
 }
 .primary {
   text-align: center;
   color: white;
   @apply bg-blue-600;
+  transition: all .5s;
   padding: 7px 10px;
   cursor: pointer;
   border-radius: 5px;

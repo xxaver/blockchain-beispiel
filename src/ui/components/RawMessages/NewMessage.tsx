@@ -1,5 +1,5 @@
 import {FC, useContext, useMemo, useState} from "react";
-import {RealtimeContext} from "../Realtime/RealtimeContext.ts";
+import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {CircleAlert, Send} from "lucide-react";
 
 const initial = JSON.stringify({

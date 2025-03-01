@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
 import {ArrowUpRight, Box, Coins, ShieldX} from "lucide-react";
-import {Message} from "../Realtime/RealtimeContext.ts";
+import {Message} from "../../handlers/Realtime/RealtimeContext.ts";
 import {wholeJson} from "./util.ts";
 
 const knownEvents: {
@@ -49,6 +49,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
         </div>
         <div className="grow p-4">
             <textarea
+                readOnly
                 className="resize-none h-full w-full rounded-lg p-2 bg-gray-100 font-mono"
                 value={JSON.stringify(json, null, 3)}/>
         </div>
