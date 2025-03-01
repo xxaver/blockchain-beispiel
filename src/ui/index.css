@@ -50,3 +50,13 @@ button:not(:disabled):hover {
 button:not(:disabled):active {
   @apply bg-gray-300;
 }
+
+.toggle {
+  @apply px-2 py-1.5 rounded-md
+}
+.toggle.toggled {
+  @apply bg-blue-200 text-blue-600 
+}
+.toggle.toggled:hover {
+  @apply bg-blue-300
+}

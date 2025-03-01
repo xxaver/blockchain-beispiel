@@ -1,7 +1,7 @@
 import {FC, useContext, useEffect, useRef, useState} from "react";
 
 import {Message, RealtimeContext} from "../Realtime/RealtimeContext.ts";
-import {ArrowDown, Plus} from "lucide-react";
+import {ArrowDown, Network, Plus} from "lucide-react";
 import {NewMessage} from "./NewMessage.tsx";
 import {RawMessageView} from "./RawMessageView.tsx";
 
@@ -32,15 +32,17 @@ export const RawMessageList: FC = () => {
         if (autoScroll) setScroll(false)
     }, [autoScroll]);
 
-    return <div className="min-h-0 grow-0 shrink-0 w-96 border-l border-gray-200 flex flex-col">
-        <div className="p-2 border-b border-gray-200 flex items-center">
-            <h1>Nachrichten</h1>
+    return <>
+        <div className="p-2 border-b border-gray-200 flex items-center gap-2">
+            <Network/>
+            <h1>Übertragung</h1>
             <div className="grow"></div>
             <button onClick={() => setSelected(selected === true ? null : true)}>
                 <Plus/>
             </button>
         </div>
-        <div className={"grow relative min-h-0" + (messages.length ? "" : " text-center flex items-center justify-center text-gray-400")}>
+        <div
+            className={"grow relative min-h-0" + (messages.length ? "" : " text-center flex items-center justify-center text-gray-400")}>
             {!messages.length && "Keine Nachrichten empfangen"}
             <div ref={list} className="overflow-auto h-full" onScroll={() => {
                 console.log(programmScroll.current)
@@ -72,6 +74,6 @@ export const RawMessageList: FC = () => {
                 ? <NewMessage close={() => setSelected(null)}/>
                 : <RawMessageView details message={selected}/>}
         </div>}
-    </div>
+    </>
 }
 
