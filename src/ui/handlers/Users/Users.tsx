@@ -8,6 +8,8 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const [knownUsers, setKnownUsers] = useState<KnownUser[]>([]);
     const [ownUsers, setOwnUsers] = useState<OwnUser[]>([]);
     const {url} = useParams()!
+    
+    const sendUsers = (users: OwnUser[]) => users.forEach(user => send("join", removePrivateKey(user)));
 
     useEvent("join", (data: KnownUser) => {
         setKnownUsers(users => {
@@ -15,13 +17,12 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
             return [...users, data]
         })
     })
-    useEvent("discover", () => {
-        ownUsers.forEach(user => send("join", removePrivateKey(user)))
-    })
+    useEvent("discover", () => sendUsers(ownUsers))
     useEffect(() => {
         let users = [];
         try {
-            users = JSON.parse(localStorage.getItem(`users:${url}`) as string)
+            users = JSON.parse(localStorage.getItem(`users:${url}`) as string);
+            sendUsers(users);
         } catch { /* empty */
         }
         setOwnUsers(users as OwnUser[]);

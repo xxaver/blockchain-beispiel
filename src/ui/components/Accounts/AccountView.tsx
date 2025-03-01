@@ -71,7 +71,7 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
                               setComputationalPower(e.target.value)
                           }}
                           onBlur={() => {
-                              const int = parseInt(computationalPower);
+                              const int = parseFloat(computationalPower);
                               if (!isNaN(int)) update((u) => {
                                   u.computationalPower = int;
                               });
