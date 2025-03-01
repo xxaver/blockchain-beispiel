@@ -32,7 +32,7 @@ export const AccountList: FC = () => {
             className="grow relative min-h-0">
             <h2 className="p-2">Deine Konten</h2>
             {!ownUsers.length && <div className="p-2 text-center py-10 text-gray-400">Noch kein Konto angelegt!</div>}
-            {ownUsers.map(user => <div className="p-2 item bg-white">
+            {ownUsers.map(user => <div className="p-2 item bg-white" key={user.publicKey}>
                 <div className="cursor-pointer">
                     <div>{user.name}</div>
                 </div>
@@ -41,7 +41,7 @@ export const AccountList: FC = () => {
             </div>)}
             <h2 className="p-2">Andere Konten</h2>
             {!otherUsers.length && <div className="p-2 text-center py-10 text-gray-400">Keine anderen Benutzer</div>}
-            {otherUsers.map(user => <div className="p-2 item bg-white">
+            {otherUsers.map(user => <div className="p-2 item bg-white" key={user.publicKey}>
                 <div>
                     <div>{user.name}</div>
                     <div>{user.publicKey}</div>

@@ -2,17 +2,13 @@ import {FC, useContext, useMemo, useState} from "react";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {CircleAlert, Send} from "lucide-react";
 
-const initial = JSON.stringify({
-    event: ""
-}, null, 3)
-
 export const NewMessage: FC<{ close: () => void }> = ({close}) => {
     const {send} = useContext(RealtimeContext)!;
-    const [value, setValue] = useState(initial);
+    const [event, setEvent] = useState("");
+    const [value, setValue] = useState("{}");
     const error = useMemo(() => {
         try {
-            const json = JSON.parse(value);
-            if (!Object.keys(json).includes("event")) return 'Muss Feld "event" enthalten';
+            JSON.parse(value);
         } catch {
             return "Kein gültiges JSON-Objekt";
         }
@@ -20,7 +16,8 @@ export const NewMessage: FC<{ close: () => void }> = ({close}) => {
 
     return <div className="flex flex-col h-full">
         <div className="p-2">Neue Nachricht</div>
-        <div className="grow p-4">
+        <div className="grow p-4 flex flex-col items-stretch gap-3">
+            <input placeholder="Event" type="text" value={event} onChange={e => setEvent((e.target as HTMLInputElement).value)}/>
         <textarea
             onChange={e => setValue(e.target.value)}
             onBlur={() => {

@@ -25,9 +25,11 @@ const knownEvents: {
     }
 }
 export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({details, message}) => {
+    const {event, payload} = message;
+    
     let title: ReactNode = "", error: null | string, icon = <ShieldX/> as ReactNode,
         color = "text-red-600 bg-red-600/20";
-    const e = knownEvents[message.event];
+    const e = knownEvents[event];
     if (e) {
         error = e.error(message);
         icon = e.icon;
@@ -38,14 +40,12 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
     } else {
         error = "Fehlerhafte Nachricht";
     }
-    const json = wholeJson(message);
-    delete json.outgoing;
-    delete json.timestamp;
+    const json = wholeJson(payload);
 
     return details ? <div className="flex flex-col h-full">
         <div className={`flex items-center p-2 gap-2 ${color}`}>
             {icon}
-            {title}
+            {title || event}
         </div>
         <div className="grow p-4">
             <textarea
@@ -69,7 +69,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
         </div>}
     </div> : <div className={`flex items-center p-2 gap-2 ${color}`}>
         {icon}
-        {error || title}
+        {title || event}
         <div className="grow"/>
         {message.outgoing && <ArrowUpRight size={25}/>}
     </div>

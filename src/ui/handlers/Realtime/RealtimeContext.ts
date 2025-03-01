@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect} from "react";
+import {createContext, useContext, useEffect, useRef} from "react";
 import {RealtimeChannel} from "@supabase/supabase-js";
 
 export type Handler<T> = (payload: T) => void;
@@ -9,18 +9,23 @@ export const RealtimeContext = createContext<{
     subscribe: <T extends object>(event: string, handler: Handler<T>) => void,
     unsubscribe: <T extends object>(event: string, handler: Handler<T>) => void,
 } | null>(null);
-export type Message = object & {
+export type Message = {
     outgoing?: boolean;
     timestamp: number;
     event: string;
+    payload: object;
 }
 export const useEvent = <T extends object>(event: string, handler: Handler<T>) => {
     const context = useContext(RealtimeContext);
+    const handled = useRef(0);
+
     useEffect(() => {
         if (!context) return;
-        context.subscribe(event, handler)
-        return () => {
-            context.unsubscribe(event, handler)
+        for (let i = handled.current; i < context.messages.length; i++) {
+            const message = context.messages[i];
+            if (event === message.event && !message.outgoing) handler(message.payload as never);
         }
-    }, [context]);
+        handled.current = context.messages.length;
+    }, [context, handler]);
+    
 }

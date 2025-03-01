@@ -20,19 +20,17 @@ export const Realtime: FC<PropsWithChildren<{
             type: "broadcast",
             event,
             payload: payload
-        }).then(() => setMessages([...messages, {event, ...payload, outgoing: true, timestamp: Date.now()}]))
+        }).then(() => setMessages([...messages, {event, payload, outgoing: true, timestamp: Date.now()}]))
     }
 
     useEffect(() => {
-        const subscription = channel.on("broadcast", {event: "*"}, (payload) => {
-            console.log(payload)
-            setMessages(messages => [...messages, {...payload, timestamp: Date.now()}]);
+        const subscription = channel.on("broadcast", {event: "*"}, ({payload, event}) => {
+            setMessages(messages => [...messages, {payload, event, timestamp: Date.now()}]);
             subscriptions.current.forEach(({event, handler}) => {
-                if (event === payload.event) handler(payload as never)
+                if (event === event) handler(payload as never)
             })
         });
-        subscription.subscribe()
-        send("discover");
+        subscription.subscribe(() => send("discover"))
         return () => {
             subscription.unsubscribe()
         }

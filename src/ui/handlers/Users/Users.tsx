@@ -17,8 +17,8 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     })
     useEvent("discover", () => {
         ownUsers.forEach(user => send("join", {
-            publicKey: user.publicKey,
-            name: user.name
+            name: user.name,
+            publicKey: user.publicKey
         }))
     })
 
