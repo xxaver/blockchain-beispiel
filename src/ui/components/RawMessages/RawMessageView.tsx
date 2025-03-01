@@ -1,41 +1,21 @@
 import {FC, ReactNode} from "react";
-import {ArrowUpRight, Box, Coins, ShieldX} from "lucide-react";
+import {ArrowUpRight, ShieldX} from "lucide-react";
 import {Message} from "../../handlers/Realtime/RealtimeContext.ts";
 import {wholeJson} from "./util.ts";
+import {KnownEvents} from "./KnownEvents.tsx";
 
-const knownEvents: {
-    [key: string]: {
-        color: string;
-        title: (value: object) => ReactNode,
-        error: (value: object) => string | null,
-        icon: ReactNode
-    };
-} = {
-    transaction: {
-        color: "text-yellow-800 bg-yellow-600/20",
-        title: () => "Transaktion",
-        error: () => null,
-        icon: <Coins/>
-    },
-    block: {
-        color: "text-blue-600 bg-blue-600/20",
-        title: () => "Block",
-        error: () => null,
-        icon: <Box/>
-    }
-}
 export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({details, message}) => {
     const {event, payload} = message;
     
     let title: ReactNode = "", error: null | string, icon = <ShieldX/> as ReactNode,
         color = "text-red-600 bg-red-600/20";
-    const e = knownEvents[event];
+    const e = KnownEvents[event];
     if (e) {
-        error = e.error(message);
+        error = e.error ? e.error(message) : "";
         icon = e.icon;
         if (!error) {
-            title = e.title(message);
-            color = e.color;
+            title = e.title ? e.title(message) : event;
+            color = e.color || "";
         }
     } else {
         error = "Fehlerhafte Nachricht";
