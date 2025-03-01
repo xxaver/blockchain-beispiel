@@ -46,7 +46,11 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
                 </button>
                 <button
                     className="text-red-600"
-                    onClick={() => confirm("Wirklich löschen?") && setOwnUsers(users => users.filter(user => user.publicKey !== publicKey))}>
+                    onClick={() => {
+                        if(!confirm("Wirklich löschen?")) return;
+                        setOwnUsers(users => users.filter(user => user.publicKey !== publicKey));
+                        send("join", {...removePrivateKey(user), computationalPower: 0})
+                    }}>
                     <Trash2/>
                 </button>
             </>}
