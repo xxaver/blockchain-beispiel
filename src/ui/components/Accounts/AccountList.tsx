@@ -4,6 +4,7 @@ import {UsersContext} from "../../handlers/Users/UsersContext.tsx";
 import {produce} from "immer";
 import {generateKeyPair} from "../../../blockchain/crypto.ts";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
+import {CurrentCoins} from "./CurrentCoins.tsx";
 
 export const AccountList: FC = () => {
     const {send} = useContext(RealtimeContext)!;
@@ -32,22 +33,21 @@ export const AccountList: FC = () => {
             className="grow relative min-h-0">
             <h2 className="p-2">Deine Konten</h2>
             {!ownUsers.length && <div className="p-2 text-center py-10 text-gray-400">Noch kein Konto angelegt!</div>}
-            {ownUsers.map(user => <div className="p-2 item bg-white" key={user.publicKey}>
+            {ownUsers.map(user => <div className="p-2 item bg-white flex items-center gap-2" key={user.publicKey}>
                 <div className="cursor-pointer">
                     <div>{user.name}</div>
                 </div>
                 <div className="grow"></div>
-                <div></div>
+                <CurrentCoins publicKey={user.publicKey} />
             </div>)}
             <h2 className="p-2">Andere Konten</h2>
             {!otherUsers.length && <div className="p-2 text-center py-10 text-gray-400">Keine anderen Benutzer</div>}
-            {otherUsers.map(user => <div className="p-2 item bg-white" key={user.publicKey}>
+            {otherUsers.map(user => <div className="p-2 item bg-white flex items-center gap-2" key={user.publicKey}>
                 <div>
                     <div>{user.name}</div>
-                    <div>{user.publicKey}</div>
                 </div>
                 <div className="grow"></div>
-                <div></div>
+                <CurrentCoins publicKey={user.publicKey} />
             </div>)}
         </div>
     </>
