@@ -1,12 +1,11 @@
-import {createContext, Dispatch, SetStateAction} from "react";
+import {createContext, Dispatch, SetStateAction, useContext} from "react";
 
 export interface KnownUser {
     name: string;
     publicKey: string;
+    computationalPower: number;
 }
-export interface OwnUser {
-    name: string;
-    publicKey: string;
+export interface OwnUser extends KnownUser {
     privateKey: string;
 }
 
@@ -15,3 +14,7 @@ export const UsersContext = createContext<null | {
     ownUsers: OwnUser[];
     setOwnUsers: Dispatch<SetStateAction<OwnUser[]>>;
 }>(null)
+export const useUser = (publicKey: string) => {
+    const {knownUsers} = useContext(UsersContext)!;
+    return knownUsers.find(e => e.publicKey === publicKey);
+}

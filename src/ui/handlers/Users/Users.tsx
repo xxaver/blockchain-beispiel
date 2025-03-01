@@ -34,7 +34,8 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
         localStorage.setItem(`users:${url}`, JSON.stringify(ownUsers))
     }, [ownUsers]);
 
-    return <UsersContext.Provider value={{knownUsers, ownUsers, setOwnUsers}}>
+    return <UsersContext.Provider value={{knownUsers: [...ownUsers, ...knownUsers], ownUsers, setOwnUsers}}>
         {children}
     </UsersContext.Provider>
 }
+

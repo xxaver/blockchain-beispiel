@@ -4,7 +4,7 @@ import {UsersContext} from "../../handlers/Users/UsersContext.tsx";
 import {produce} from "immer";
 import {generateKeyPair} from "../../../blockchain/crypto.ts";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
-import {CurrentCoins} from "./CurrentCoins.tsx";
+import {AccountTitle} from "./AccountTitle.tsx";
 
 export const AccountList: FC = () => {
     const {send} = useContext(RealtimeContext)!;
@@ -23,7 +23,7 @@ export const AccountList: FC = () => {
 
                 send("join", {name, publicKey});
                 setOwnUsers(users => produce(users, draft => {
-                    draft.push({name, publicKey, privateKey})
+                    draft.push({name, publicKey, privateKey, computationalPower: null});
                 }))
             }}>
                 <Plus/>
@@ -34,20 +34,12 @@ export const AccountList: FC = () => {
             <h2 className="p-2">Deine Konten</h2>
             {!ownUsers.length && <div className="p-2 text-center py-10 text-gray-400">Noch kein Konto angelegt!</div>}
             {ownUsers.map(user => <div className="p-2 item bg-white flex items-center gap-2" key={user.publicKey}>
-                <div className="cursor-pointer">
-                    <div>{user.name}</div>
-                </div>
-                <div className="grow"></div>
-                <CurrentCoins publicKey={user.publicKey} />
+                <AccountTitle publicKey={user.publicKey} />
             </div>)}
             <h2 className="p-2">Andere Konten</h2>
             {!otherUsers.length && <div className="p-2 text-center py-10 text-gray-400">Keine anderen Benutzer</div>}
             {otherUsers.map(user => <div className="p-2 item bg-white flex items-center gap-2" key={user.publicKey}>
-                <div>
-                    <div>{user.name}</div>
-                </div>
-                <div className="grow"></div>
-                <CurrentCoins publicKey={user.publicKey} />
+                <AccountTitle publicKey={user.publicKey} />
             </div>)}
         </div>
     </>
