@@ -1,5 +1,5 @@
 import {FC, useContext} from "react";
-import {Cpu} from "lucide-react";
+import {Pickaxe} from "lucide-react";
 import {UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 
 export const ComputationalPower: FC<{
@@ -11,7 +11,7 @@ export const ComputationalPower: FC<{
     const totalPower = knownUsers.reduce((acc, cur) => acc + cur.computationalPower, 0);
 
     return <div className="bg-blue-200 text-blue-600 flex items-center rounded-4xl gap-2 p-2">
-        <Cpu/>
+        <Pickaxe/>
         <span>{Math.round((user.computationalPower / totalPower) * 100)}%</span>
     </div>
 };

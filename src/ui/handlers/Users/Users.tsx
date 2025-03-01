@@ -1,7 +1,6 @@
 import {FC, PropsWithChildren, useContext, useEffect, useState} from "react";
-import {KnownUser, OwnUser, UsersContext} from "./UsersContext.tsx";
+import {KnownUser, OwnUser, removePrivateKey, UsersContext} from "./UsersContext.tsx";
 import {RealtimeContext, useEvent} from "../Realtime/RealtimeContext.ts";
-import {produce} from "immer";
 import {useParams} from "react-router";
 
 export const Users: FC<PropsWithChildren> = ({children}) => {
@@ -11,23 +10,20 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const {url} = useParams()!
 
     useEvent("join", (data: KnownUser) => {
-        setKnownUsers(users => produce(users, draft => {
-            const user = draft.find(e => e.publicKey === data.publicKey)
-            if (user) user.name = data.name;
-            else draft.push(data);
-        }))
+        setKnownUsers(users => {
+            if (users.some(user => user.publicKey === data.publicKey)) return users.map(user => user.publicKey === data.publicKey ? data : user);
+            return [...users, data]
+        })
     })
     useEvent("discover", () => {
-        ownUsers.forEach(user => send("join", {
-            name: user.name,
-            publicKey: user.publicKey
-        }))
+        ownUsers.forEach(user => send("join", removePrivateKey(user)))
     })
     useEffect(() => {
         let users = [];
         try {
             users = JSON.parse(localStorage.getItem(`users:${url}`) as string)
-        } catch { /* empty */ }
+        } catch { /* empty */
+        }
         setOwnUsers(users as OwnUser[]);
     }, [url]);
     useEffect(() => {

@@ -45,7 +45,6 @@ export const RawMessageList: FC = () => {
             className={"grow relative min-h-0" + (messages.length ? "" : " text-center flex items-center justify-center text-gray-400")}>
             {!messages.length && "Keine Nachrichten empfangen"}
             <div ref={list} className="overflow-auto h-full" onScroll={() => {
-                console.log(programmScroll.current)
                 if (!list.current || programmScroll.current) return;
                 const e = list.current;
                 setAutoScroll(e.scrollTop === (e.scrollHeight - e.offsetHeight))

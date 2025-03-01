@@ -50,7 +50,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
         <div className="grow p-4">
             <textarea
                 readOnly
-                className="resize-none h-full w-full rounded-lg p-2 bg-gray-100 font-mono"
+                className="resize-none h-full w-full font-mono"
                 value={JSON.stringify(json, null, 3)}/>
         </div>
         <div className="p-2 text-right">

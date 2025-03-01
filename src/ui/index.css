@@ -67,3 +67,6 @@ button:not(:disabled):active {
 .item:active {
   filter: brightness(60%);
 }
+textarea {
+  @apply  rounded-lg p-2 bg-gray-100;
+}
