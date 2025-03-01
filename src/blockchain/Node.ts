@@ -1,6 +1,6 @@
-import {toBase58} from "../crypto.ts";
 import {Transaction} from "./Transaction.ts";
 import {Signed} from "./Signed.ts";
+import {toBase58} from "./crypto.ts";
 
 export const getAddress = async (publicKey: CryptoKey) => {
     const exportedKey = await crypto.subtle.exportKey('raw', publicKey);

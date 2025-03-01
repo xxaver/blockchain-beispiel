@@ -4,12 +4,12 @@ import {Realtime} from "../handlers/Realtime/Realtime.tsx";
 import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
 import {BlockchainView} from "../components/Blockchain/BlockchainView.tsx";
 import {AccountList} from "../components/Accounts/AccountList.tsx";
-import {Boxes, Coins, Network} from "lucide-react";
+import {Boxes, Network, UserSearch} from "lucide-react";
 import {Users} from "../handlers/Users/Users.tsx";
 
 const areas = [
     [<><Boxes/> Blockchain</>, <BlockchainView/>],
-    [<><Coins/> Konten</>, <AccountList/>],
+    [<><UserSearch/> Konten</>, <AccountList/>],
     [<><Network/> Übertragung</>, <RawMessageList/>]]
 
 export const Main: FC = () => {

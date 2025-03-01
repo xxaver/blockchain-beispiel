@@ -31,9 +31,7 @@ export const Realtime: FC<PropsWithChildren<{
                 if (event === payload.event) handler(payload as never)
             })
         });
-        console.log("SUBSCRIBE")
         subscription.subscribe()
-        console.log("SUBSCRIBE ok")
         send("discover");
         return () => {
             subscription.unsubscribe()
