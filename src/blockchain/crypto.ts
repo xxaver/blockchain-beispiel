@@ -22,13 +22,14 @@ export const exportKey = async (key: CryptoKey, format: "pkcs8" | "spki") => {
 };
 
 export const importKey = async (key: string, format: "pkcs8" | "spki") => {
-    const ab = str2ab(atob(key));
+    const ab = str2ab(key);
     console.log(ab);
     console.log(new Uint8Array(ab));
-    return window.crypto.subtle.importKey(format,ab, algorithm, true, ["sign"]);
+    return window.crypto.subtle.importKey(format, ab, algorithm, true, [format === "spki" ? "verify" : "sign"]);
 }
 
-export const str2ab = (str: string) => {
+export const str2ab = (string: string) => {
+    const str = atob(string)
     const buf = new ArrayBuffer(str.length);
     const bufView = new Uint8Array(buf);
     for (let i = 0, strLen = str.length; i < strLen; i++) {

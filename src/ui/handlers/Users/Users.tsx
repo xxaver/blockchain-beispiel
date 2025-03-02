@@ -2,6 +2,7 @@ import {FC, PropsWithChildren, useContext, useEffect, useState} from "react";
 import {KnownUser, OwnUser, removePrivateKey, UsersContext} from "./UsersContext.tsx";
 import {RealtimeContext, useEvent} from "../Realtime/RealtimeContext.ts";
 import {useParams} from "react-router";
+import {MiningHandler} from "./MiningHandler.tsx";
 
 export const Users: FC<PropsWithChildren> = ({children}) => {
     const {send} = useContext(RealtimeContext)!
@@ -32,6 +33,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     }, [ownUsers]);
 
     return <UsersContext.Provider value={{knownUsers: [...ownUsers, ...knownUsers], ownUsers, setOwnUsers}}>
+        <MiningHandler />
         {children}
     </UsersContext.Provider>
 }

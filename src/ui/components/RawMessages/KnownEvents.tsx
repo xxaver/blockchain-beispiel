@@ -1,18 +1,19 @@
-import {ReactNode} from "react";
+import {FC, ReactNode} from "react";
 import {Box, Coins, Search, UserRoundPlus} from "lucide-react";
+import {TransactionError, TransactionTitle} from "./TransactionTitle.tsx";
 
 export const KnownEvents: {
     [key: string]: {
         color?: string;
-        title?: (value: object) => ReactNode,
-        error?: (value: object) => string | null,
+        title?: FC<{message: object}>,
+        error?: FC<{message: object}>,
         icon: ReactNode
     };
 } = {
     transaction: {
         color: "text-yellow-800 bg-yellow-600/20",
-        title: () => "Transaktion",
-        error: () => null,
+        title: TransactionTitle,
+        error: TransactionError,
         icon: <Coins/>
     },
     block: {

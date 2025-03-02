@@ -35,8 +35,6 @@ export const NewMessage: FC<{ close: () => void }> = ({close}) => {
             </div>
             <button disabled={!!error} className="flex items-center gap-2 primary" onClick={() => {
                 const json = JSON.parse(value);
-                const {event} = json;
-                delete json.event;
                 send(event, json)
                 close();
             }}>

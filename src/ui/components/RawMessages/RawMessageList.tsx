@@ -50,7 +50,7 @@ export const RawMessageList: FC = () => {
                 setAutoScroll(e.scrollTop === (e.scrollHeight - e.offsetHeight))
             }}>
                 {messages.map((message, i) =>
-                    <div key={i} className="cursor-pointer item"
+                    <div key={i} className="cursor-pointer item bg-white"
                          onClick={() => setSelected(selected === message ? null : message)}>
                         <RawMessageView message={message}/>
                     </div>

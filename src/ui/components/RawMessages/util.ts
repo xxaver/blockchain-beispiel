@@ -1,5 +1,8 @@
+import {useEffect, useState} from "react";
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const wholeJson = (json: unknown): any => {
+    return json;
     if (typeof json === "string") {
         try {
             return wholeJson(JSON.parse(json));
@@ -18,4 +21,21 @@ export const wholeJson = (json: unknown): any => {
         return newJson;
     }
     return json;
+}
+
+export const usePromise = <T>(promise: Promise<T>): T | null => {
+    const [value, setValue] = useState<T | null>(null);
+    useEffect(() => {
+        promise.then(value => setValue(value));
+    }, []);
+    return value;
+}
+
+export const parseJSON = (json: string, normal=null) => {
+    try {
+        return JSON.parse(json);
+    }
+    catch {
+        return normal;
+    }
 }
