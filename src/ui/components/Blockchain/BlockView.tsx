@@ -12,7 +12,6 @@ import {difficulty} from "../../config.ts";
 
 export const BlockView: FC<{ block: ComputedBlock }> = ({block}) => {
     const {setSelectedBlock, currentChain} = useContext(BlockchainContext)!;
-    const transactions = parseJSON(block.data);
 
     const isSelected = currentChain.some(e => e.hash === block.hash);
     return <div
@@ -38,11 +37,11 @@ export const BlockView: FC<{ block: ComputedBlock }> = ({block}) => {
                     <span className="text-red-600">Ungültig</span>
                 </>}
             </>}>
-                {transactions.map((transaction: Transaction, i: number) => <div key={i}
+                {block.transactions.map((transaction: Transaction, i: number) => <div key={i}
                                                                                 className="flex items-center gap-1">
                     <TransactionTitle withFee transaction={transaction}/>
                 </div>)}
-                {!transactions.length && <div className="text-center text-gray-400 py-5">
+                {!block.transactions.length && <div className="text-center text-gray-400 py-5">
                     Keine Transaktionen
                 </div>}
             </Accordeon>

@@ -45,13 +45,12 @@ export const useLoaded = () => {
     }, []);
     return loaded;
 }
-export const sortedIndex = <T>(array: T[], value: number, key: (e: T) => number, descending = true) => {
+export const sortedIndex = (array: number[], value: number, descending = true) => {
     let low = 0, high = array.length;
 
     while (low < high) {
         const mid = (low + high) >>> 1;
-        const v = key(array[mid]);
-        if (descending ? (v < value) : (v > value)) low = mid + 1;
+        if (descending ? (array[mid] < value) : (array[mid] > value)) low = mid + 1;
         else high = mid;
     }
     return low;

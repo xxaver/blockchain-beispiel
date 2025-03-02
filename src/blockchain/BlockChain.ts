@@ -51,33 +51,33 @@ export const getBlockChains = (blocks: ComputedBlock[], id = 0, prevHash = ""): 
         .map<BlockChainBlock>(block => ({block, children: getBlockChains(blocks, id + 1, block.hash)}))
 }
 
-export const addAccountBalances = (block: BlockChainBlock, balances: Record<string, number> = {}, allTransactions: Transaction[] = []) => {
+export const addAccountBalances = (block: BlockChainBlock, balances: Record<string, number> = {}, pastTransactions: Transaction[] = []) => {
     block.block.transactionsValid = true;
-    balances = {...balances};
-    balances[block.block.mined.publicKey] = (balances[block.block.mined.publicKey] || 0) + 1;
+    block.block.balances = {...balances};
+    block.block.pastTransactions = [...pastTransactions];
+    block.block.balances[block.block.mined.publicKey] = (block.block.balances[block.block.mined.publicKey] || 0) + 1;
     for (const transaction of block.block.transactions) {
         if (transaction.amount < 0
             || transaction.fee < 0
-            || balances[transaction.from] < transaction.amount + transaction.fee
-            || allTransactions.some(e => e.id === transaction.id && e.from === transaction.from)
+            || (block.block.balances[transaction.from] || 0) < transaction.amount + transaction.fee
+            || block.block.pastTransactions.some(e => e.id === transaction.id && e.from === transaction.from)
             || !transaction.isSigned
         ) {
             transaction.isValid = false;
             block.block.transactionsValid = false;
         } else transaction.isValid = true;
-        allTransactions.push(transaction);
-        balances[transaction.from] = (balances[transaction.from] || 0) - transaction.amount - transaction.fee;
-        balances[transaction.to] = (balances[transaction.to] || 0) + transaction.amount;
-        balances[block.block.mined.publicKey] = (balances[block.block.mined.publicKey] || 0) + transaction.fee;
+        block.block.pastTransactions.push(transaction);
+        block.block.balances[transaction.from] = (block.block.balances[transaction.from] || 0) - transaction.amount - transaction.fee;
+        block.block.balances[transaction.to] = (block.block.balances[transaction.to] || 0) + transaction.amount;
+        block.block.balances[block.block.mined.publicKey] = (block.block.balances[block.block.mined.publicKey] || 0) + transaction.fee;
     }
-    block.block.balances = balances;
-    for (const balance in balances) {
-        if (balances[balance] < 0) {
+    for (const balance in block.block.balances) {
+        if (block.block.balances[balance] < 0) {
             block.block.transactionsValid = false;
             break;
         }
     }
-    block.children.forEach(child => addAccountBalances(child, balances, allTransactions));
+    block.children.forEach((e) => addAccountBalances(e, block.block.balances, block.block.pastTransactions));
     return block;
 }
 
@@ -88,7 +88,6 @@ export const getMaxChain = (block: BlockChainBlock): ComputedBlock[] => {
     return [block.block, ...all.find(e => e.length === max)!];
 }
 export const getContainingChain = (block: BlockChainBlock, searchHash: string): ComputedBlock[] | null => {
-    console.log(block, searchHash);
     if (block.block.hash === searchHash) return [block.block];
     for (let i = 0; i < block.children.length; i++) {
         const chain = getContainingChain(block.children[i], searchHash);

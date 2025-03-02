@@ -25,7 +25,6 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
         else return getContainingChain(chains, selectedBlock) || [];
     }, [selectedBlock, chains])
 
-    console.log(blocks)
     useEvent("block", async (block: Block) => {
         const real = await computeBlock(block);
         setBlocks(blocks => {

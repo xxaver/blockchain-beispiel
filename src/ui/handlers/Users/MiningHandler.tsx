@@ -8,14 +8,14 @@ import {RealtimeContext} from "../Realtime/RealtimeContext.ts";
 export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
     const {currentChain} = useContext(BlockchainContext)!;
     const prevHash = currentChain.at(-1)?.hash || "";
-    const {mempool} = useContext(MempoolContext)!;
+    const {valid} = useContext(MempoolContext)!;
     const {send} = useContext(RealtimeContext)!;
 
     const workingOn = useMemo<Block>(() => ({
         id: currentChain.length,
         prevHash,
         mined: null,
-        data: JSON.stringify(mempool.slice(0, 5)),
+        data: JSON.stringify(valid.map(e => e.signed).slice(0, 5)),
     }), [prevHash]);
 
     const interval = useRef<null | ReturnType<typeof setInterval>>(null)
