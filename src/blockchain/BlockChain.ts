@@ -2,6 +2,7 @@ import {Block, getBlockHash, ProofOfWork, verifyProofOfWork} from "./Block.ts";
 import {Transaction} from "./Transaction.ts";
 import {parseJSON} from "../ui/util.ts";
 import {Signed, verify} from "./Signed.ts";
+import {maxTransactions} from "../ui/config.ts";
 
 export const genesisBlock: ComputedBlock = {
     id: 0,
@@ -46,6 +47,12 @@ export const computeBlock = async (block: Block): Promise<ComputedBlock> => ({
     proofOfWorkValid: await verifyProofOfWork(block),
     mined: block.mined!
 })
+export const uncomputeBlock = (block: ComputedBlock): Block => ({
+    mined: block.mined,
+    id: block.id,
+    data: block.data,
+    prevHash: block.prevHash,
+})
 export const getBlockChains = (blocks: ComputedBlock[], id = 0, prevHash = ""): BlockChainBlock[] => {
     return blocks.filter(block => block.id === id && block.prevHash === prevHash)
         .map<BlockChainBlock>(block => ({block, children: getBlockChains(blocks, id + 1, block.hash)}))
@@ -56,6 +63,7 @@ export const addAccountBalances = (block: BlockChainBlock, balances: Record<stri
     block.block.balances = {...balances};
     block.block.pastTransactions = [...pastTransactions];
     block.block.balances[block.block.mined.publicKey] = (block.block.balances[block.block.mined.publicKey] || 0) + 1;
+    if(block.block.transactions.length > maxTransactions) block.block.transactionsValid = false;
     for (const transaction of block.block.transactions) {
         if (transaction.amount < 0
             || transaction.fee < 0

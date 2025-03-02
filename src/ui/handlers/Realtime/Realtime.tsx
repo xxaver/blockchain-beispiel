@@ -14,8 +14,9 @@ export const Realtime: FC<PropsWithChildren<{
         handler: Handler<never>
     }[]>([]);
 
-    const send = (event: string, payload?: object) => {
+    const send = (event: string, payload?: object, silent?: boolean) => {
         payload = payload || {};
+        if(silent) (payload as {silent: boolean}).silent = true;
         channel.send({
             type: "broadcast",
             event,

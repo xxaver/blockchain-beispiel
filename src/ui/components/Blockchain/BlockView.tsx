@@ -6,9 +6,9 @@ import {AlertCircle, MousePointer2} from "lucide-react";
 import {AccountTitle} from "../Accounts/AccountTitle.tsx";
 import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {Transaction} from "../../../blockchain/Transaction.ts";
-import {parseJSON} from "../../util.ts";
 import {ComputedBlock} from "../../../blockchain/BlockChain.ts";
 import {difficulty} from "../../config.ts";
+import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 
 export const BlockView: FC<{ block: ComputedBlock }> = ({block}) => {
     const {setSelectedBlock, currentChain} = useContext(BlockchainContext)!;
@@ -32,13 +32,18 @@ export const BlockView: FC<{ block: ComputedBlock }> = ({block}) => {
                     Transaktionen
                 </div>
                 <div className="grow"></div>
+                <div
+                    className="rounded-[100%] flex items-center text-center justify-center w-5 h-5 bg-blue-300 text-blue-700">
+                    {block.transactions.length}
+                </div>
+                <CurrentCoins coins={block.transactions.reduce((a, b) => a + b.fee, 0)}/>
                 {!block.transactionsValid && <>
                     <AlertCircle className="text-red-600"/>
                     <span className="text-red-600">Ungültig</span>
                 </>}
             </>}>
                 {block.transactions.map((transaction: Transaction, i: number) => <div key={i}
-                                                                                className="flex items-center gap-1">
+                                                                                      className="flex items-center gap-1">
                     <TransactionTitle withFee transaction={transaction}/>
                 </div>)}
                 {!block.transactions.length && <div className="text-center text-gray-400 py-5">

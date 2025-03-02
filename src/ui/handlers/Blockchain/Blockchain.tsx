@@ -8,7 +8,7 @@ import {
     genesisBlock,
     getBlockChains,
     getContainingChain,
-    getMaxChain
+    getMaxChain, uncomputeBlock
 } from "../../../blockchain/BlockChain.ts";
 
 export const Blockchain: FC<PropsWithChildren> = ({children}) => {
@@ -33,7 +33,7 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
         })
     }, true)
     useEvent("discover", () => {
-        blocks.forEach(block => send("block", block))
+        blocks.forEach(block => send("block", uncomputeBlock(block), true))
     })
 
     return <BlockchainContext.Provider

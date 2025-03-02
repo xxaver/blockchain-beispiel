@@ -13,7 +13,7 @@ export const AccountTransactions: FC<{ publicKey: string }> = ({publicKey}) => {
         {belonging.map((transaction) => <div
             className={"p-2 flex items-center gap-2 " + (transaction.to === publicKey ? "text-green-700 bg-green-200" : "text-red-600 bg-red-200")}
             key={`${transaction.amount}:${transaction.id}`}>
-            <TransactionTitle transaction={transaction}/>
+            <TransactionTitle withFee transaction={transaction}/>
         </div>)}
     </>
 }

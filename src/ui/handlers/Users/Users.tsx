@@ -10,7 +10,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const [ownUsers, setOwnUsers] = useState<OwnUser[]>([]);
     const {url} = useParams()!
 
-    const sendUsers = (users: OwnUser[]) => users.forEach(user => send("join", removePrivateKey(user)));
+    const sendUsers = (users: OwnUser[], silent=false) => users.forEach(user => send("join", removePrivateKey(user)), silent);
 
     useEvent("join", (data: KnownUser) => {
         setKnownUsers(users => {
@@ -18,7 +18,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
             return [...users, data]
         })
     })
-    useEvent("discover", () => sendUsers(ownUsers))
+    useEvent("discover", () => sendUsers(ownUsers, true))
     useEffect(() => {
         let users = [];
         try {

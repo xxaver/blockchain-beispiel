@@ -4,6 +4,7 @@ import {BlockchainContext} from "../Blockchain/BlockchainContext.ts";
 import {MempoolContext} from "../Mempool/MempoolContext.ts";
 import {Block, verifyProofOfWork} from "../../../blockchain/Block.ts";
 import {RealtimeContext} from "../Realtime/RealtimeContext.ts";
+import {maxTransactions} from "../../config.ts";
 
 export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
     const {currentChain} = useContext(BlockchainContext)!;
@@ -15,7 +16,7 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
         id: currentChain.length,
         prevHash,
         mined: null,
-        data: JSON.stringify(valid.map(e => e.signed).slice(0, 5)),
+        data: JSON.stringify(valid.map(e => e.signed).slice(0, maxTransactions)),
     }), [prevHash]);
 
     const interval = useRef<null | ReturnType<typeof setInterval>>(null)

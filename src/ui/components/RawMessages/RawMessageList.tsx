@@ -1,18 +1,21 @@
 import {FC, useContext, useEffect, useRef, useState} from "react";
 
 import {Message, RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
-import {ArrowDown, Network, Plus} from "lucide-react";
+import {ArrowDown, Eye, Network, Plus} from "lucide-react";
 import {NewMessage} from "./NewMessage.tsx";
 import {RawMessageView} from "./RawMessageView.tsx";
 
 export const RawMessageList: FC = () => {
     const [selected, setSelected] = useState<null | true | Message>(null)
+    const [all, setAll] = useState(false)
     const [autoScroll, setAutoScroll] = useState(true)
-    const {messages} = useContext(RealtimeContext)!;
+    const {messages: m} = useContext(RealtimeContext)!;
     const bottom = useRef<HTMLDivElement>(null);
     const list = useRef<HTMLDivElement>(null);
     const [scroll, setScroll] = useState(false);
     const programmScroll = useRef(0);
+    
+    const messages = all ? m : m.filter(e => !(e.payload as {silent: boolean}).silent);
 
     useEffect(() => {
         setAutoScroll(autoscroll => {
@@ -37,6 +40,9 @@ export const RawMessageList: FC = () => {
             <Network/>
             <h1>Übertragung</h1>
             <div className="grow"></div>
+            <button className={`toggle ${all ? "toggled" : ""}`} onClick={() => setAll(!all)}>
+                <Eye/>
+            </button>
             <button onClick={() => setSelected(selected === true ? null : true)}>
                 <Plus/>
             </button>
