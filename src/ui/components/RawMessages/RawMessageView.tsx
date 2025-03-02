@@ -3,13 +3,13 @@ import {ArrowUpRight, ShieldX} from "lucide-react";
 import {Message} from "../../handlers/Realtime/RealtimeContext.ts";
 import {wholeJson} from "../../util.ts";
 import {KnownEvents} from "./KnownEvents.tsx";
+import {Error} from "./Error.tsx";
 
 export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({details, message}) => {
     const {event, payload} = message;
     
     const e = KnownEvents[event];
-    const Error = e ? e.error || (() => null) : (() => null);
-    const Title = e ? e.title || (() => event) : (() => "Fehlerhafte Nachricht");
+    const Title = e ? e.title || (() => event) : (() => event);
     const color = e ? (e.color || ""): "text-red-600 bg-red-600/20"
     const icon = e ? e.icon : <ShieldX/> as ReactNode;
         
@@ -37,7 +37,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
                 </div>
             }
         </div>
-        <Error message={message.payload} />
+            {!e && <Error>Ungültiges Ereignis</Error>}
         </div>
    : <div className={`flex items-center p-2 gap-2 ${color}`}>
         {icon}
