@@ -1,10 +1,11 @@
 import {FC, useContext, useEffect, useState} from "react";
 import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 import {AccountTitle} from "./AccountTitle.tsx";
-import {LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
+import {HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
 import {Accordeon} from "../Accordeon.tsx";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {produce, WritableDraft} from "immer";
+import {MakeTransaction} from "./MakeTransaction.tsx";
 
 export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
     const {send} = useContext(RealtimeContext)!;
@@ -55,12 +56,6 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
                 </button>
             </>}
         </div>
-        <Accordeon title={<><LockKeyholeOpen/> Public Key</>}>
-            <textarea rows={10} readOnly value={user.publicKey}/>
-        </Accordeon>
-        {own && <Accordeon title={<><LockKeyhole/> Private Key</>}>
-            <textarea rows={10} readOnly value={user.privateKey}/>
-        </Accordeon>}
         <div className="flex items-center gap-2 p-2">
             <Pickaxe/>
             Hashes/s
@@ -78,5 +73,14 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
                           }}
             /> : user.computationalPower}
         </div>
+        <Accordeon title={<><LockKeyholeOpen/> Public Key</>}>
+            <textarea rows={10} readOnly value={user.publicKey}/>
+        </Accordeon>
+        {own && <Accordeon title={<><LockKeyhole/> Private Key</>}>
+            <textarea rows={10} readOnly value={user.privateKey}/>
+        </Accordeon>}
+        {own && <Accordeon open title={<><HandCoins /> Überweisen</>}>
+            <MakeTransaction user={user} />
+        </Accordeon>}
     </>
 }

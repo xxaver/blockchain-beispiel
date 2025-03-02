@@ -1,15 +1,16 @@
+export const algorithm = {
+    name: "RSASSA-PKCS1-v1_5",
+    modulusLength: 2048,
+    publicExponent: new Uint8Array([1, 0, 1]),
+    hash: "SHA-256"
+}
+
 export const generateKeyPair = async () => {
     const {publicKey, privateKey} = await window.crypto.subtle.generateKey(
-        {
-            name: "RSA-OAEP",
-            modulusLength: 2048,
-            publicExponent: new Uint8Array([1, 0, 1]),
-            hash: "SHA-256",
-        },
+        algorithm,
         true,
-        ["encrypt", "decrypt"]
+        ["sign", "verify"]
     );
-    console.log(publicKey);
     return {
         publicKey: await exportKey(publicKey, "spki"),
         privateKey: await exportKey(privateKey, "pkcs8")
@@ -17,8 +18,23 @@ export const generateKeyPair = async () => {
 }
 export const exportKey = async (key: CryptoKey, format: "pkcs8" | "spki") => {
     const exported = await crypto.subtle.exportKey(format, key);
-    const exportedArray = new Uint8Array(exported);
-    return btoa(String.fromCharCode(...exportedArray));
+    return toBase64(exported);
+};
+
+export const importKey = async (key: string, format: "pkcs8" | "spki") => {
+    const ab = str2ab(atob(key));
+    console.log(ab);
+    console.log(new Uint8Array(ab));
+    return window.crypto.subtle.importKey(format,ab, algorithm, true, ["sign"]);
+}
+
+export const str2ab = (str: string) => {
+    const buf = new ArrayBuffer(str.length);
+    const bufView = new Uint8Array(buf);
+    for (let i = 0, strLen = str.length; i < strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
 }
 export const toBase64 = (buffer: ArrayBuffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)));
 export const toBase58 = (buffer: ArrayBuffer) => {

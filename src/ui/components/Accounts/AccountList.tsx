@@ -33,7 +33,7 @@ export const AccountList: FC = () => {
             </button>
         </div>
         <div
-            className="flex-1 relative min-h-0">
+            className="flex-1 relative min-h-0 overflow-auto">
             <h2 className="p-2 flex items-center gap-2"><UserPen/> Deine Konten</h2>
             {!ownUsers.length && <div className="p-2 text-center py-10 text-gray-400">Noch kein Konto angelegt!</div>}
             {ownUsers.map(user => <div
@@ -51,7 +51,7 @@ export const AccountList: FC = () => {
                 <AccountTitle publicKey={user.publicKey}/>
             </div>)}
         </div>
-        {selected && <div className="flex-1 border-t border-gray-200 flex flex-col">
+        {selected && <div className="flex-1 border-t border-gray-200 flex flex-col bg-white">
             <AccountView publicKey={selected}/>
         </div>}
     </>

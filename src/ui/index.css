@@ -17,10 +17,13 @@ input:focus {
   @apply border-blue-700;
   outline: none;
 }
+input.invalid {
+    @apply border-red-600;
+}
 .primary {
   text-align: center;
   color: white;
-  @apply bg-blue-600;
+  @apply bg-blue-500;
   transition: all .5s;
   padding: 7px 10px;
   cursor: pointer;
@@ -30,7 +33,7 @@ input:focus {
   @apply bg-blue-700;
 }
 .primary:not(:disabled):active {
-  @apply bg-blue-800;
+  @apply bg-blue-900;
 }
 button {
   padding: 5px;

@@ -1,8 +1,8 @@
 import {FC, PropsWithChildren, ReactNode, useState} from "react";
 import {ChevronRight} from "lucide-react";
 
-export const Accordeon: FC<PropsWithChildren<{ title: ReactNode }>> = ({title, children}) => {
-    const [open, setOpen] = useState(false);
+export const Accordeon: FC<PropsWithChildren<{ title: ReactNode; open?: boolean }>> = ({title, children, open: initial}) => {
+    const [open, setOpen] = useState(initial);
     
     return <>
         <div className="item bg-white p-2 flex cursor-pointer items-center gap-2" onClick={() => setOpen(!open)}>
