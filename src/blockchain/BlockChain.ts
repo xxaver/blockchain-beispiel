@@ -1,5 +1,12 @@
 import {Block} from "./Block.ts";
 
+export const genesisBlock: Block = {
+    id: 0,
+    prevHash: "",
+    mined: null,
+    data: ""
+}
+
 export interface BlockChainBlock {
     block: Block;
     children: BlockChainBlock[]

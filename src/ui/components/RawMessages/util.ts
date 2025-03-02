@@ -39,3 +39,10 @@ export const parseJSON = (json: string, normal=null) => {
         return normal;
     }
 }
+export const useLoaded = () => {
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
+    return loaded;
+}
