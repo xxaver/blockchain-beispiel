@@ -16,12 +16,12 @@ export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivEl
     return <div
         ref={currentChain.at(-1)?.hash === block.hash ? selected : null}
         className={`outline-1 p-2 w-full ${!block.transactionsValid ? "outline-red-600" : ""} ${isSelected ? "bg-green-200 text-green-700" : block.id === 0 ? "bg-blue-200 text-blue-600" : ""}`}>
-        <div className="flex items-center gap-1 p-2 w-72">
+        <div className="flex items-center gap-1 p-2 w-96">
             {block.id === 0
                 ? <>Genesis Block
                     <div className="grow"></div>
                 </>
-                : <>#{block.id} von {block.mined?.publicKey && <AccountTitle publicKey={block.mined.publicKey}/>}</>}
+                : <>#{block.id} {block.mined?.publicKey && <AccountTitle publicKey={block.mined.publicKey}/>}</>}
             <button onClick={() => setSelectedBlock(block.hash)}>
                 <MousePointer2/>
             </button>

@@ -24,7 +24,7 @@ export const MiningView: FC<{publicKey: string}> = ({publicKey}) => {
     const [computationalPower, setComputationalPower] = useState(`${user?.computationalPower || 0}`)
     useEffect(() => {
         setComputationalPower(`${user?.computationalPower || 0}`)
-    }, [user]);
+    }, [user?.computationalPower]);
     
     if (!user) return null;
     const own = "privateKey" in user
@@ -48,14 +48,9 @@ export const MiningView: FC<{publicKey: string}> = ({publicKey}) => {
             /> : user.computationalPower}
         </div>
         {own && <div>
-            <h2 className="p-2">Aktueller Block</h2>
-            <div className="flex items-center gap-2">
-                Versuche: 
+            <div className="flex items-center gap-2 p-2">
+                Aktuelle Versuche: 
                 <div>{user.workingOn?.mined?.proofOfWork || "N/A"}</div>
-                <div className="grow"></div>
-                <button onClick={forceUpdate}>
-                    <RefreshCw />
-                </button>
             </div>
         </div>}
     </>

@@ -1,12 +1,14 @@
 import {FC, useContext, useEffect, useMemo, useRef} from "react";
-import {OwnUser} from "./UsersContext.tsx";
+import {OwnUser, UsersContext} from "./UsersContext.tsx";
 import {BlockchainContext} from "../Blockchain/BlockchainContext.ts";
 import {MempoolContext} from "../Mempool/MempoolContext.ts";
 import {Block, verifyProofOfWork} from "../../../blockchain/Block.ts";
 import {RealtimeContext} from "../Realtime/RealtimeContext.ts";
 import {maxTransactions} from "../../config.ts";
+import {produce} from "immer";
 
 export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
+    const {setOwnUsers} = useContext(UsersContext)!;
     const {currentChain} = useContext(BlockchainContext)!;
     const prevHash = currentChain.at(-1)?.hash || "";
     const {valid} = useContext(MempoolContext)!;
@@ -28,7 +30,7 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
 
     useEffect(() => {
         if (interval.current !== null) clearInterval(interval.current);
-        if(!user.computationalPower) return;
+        if (!user.computationalPower) return;
         interval.current = setInterval(async () => {
             const block: Block = {
                 ...workingOn, mined: {
@@ -36,6 +38,10 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
                     proofOfWork: currentPOW.current,
                 }
             }
+            setOwnUsers(users => produce(users, users => {
+                const u = users.find(u => u.publicKey === user.publicKey)!;
+                if (u) u.workingOn = block;
+            }))
             if (await verifyProofOfWork(block)) {
                 send("block", block);
             }
