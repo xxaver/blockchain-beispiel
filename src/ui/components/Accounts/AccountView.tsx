@@ -1,12 +1,13 @@
 import {FC, useContext} from "react";
 import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 import {AccountTitle} from "./AccountTitle.tsx";
-import {HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
+import {ArrowLeftRight, HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
 import {Accordeon} from "../Accordeon.tsx";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {produce, WritableDraft} from "immer";
 import {MakeTransaction} from "./MakeTransaction.tsx";
 import {MiningView} from "./MiningView.tsx";
+import {AccountTransactions} from "./AccountTransactions.tsx";
 
 export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
     const {send} = useContext(RealtimeContext)!;
@@ -63,6 +64,9 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
         </Accordeon>}
         <Accordeon open title={<><Pickaxe/> Mining</>}>
             <MiningView publicKey={publicKey} />
+        </Accordeon>
+        <Accordeon noPadding title={<><ArrowLeftRight/> Transaktionen</>}>
+            <AccountTransactions publicKey={publicKey} />
         </Accordeon>
     </>
 }

@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, ReactNode, useState} from "react";
 import {ChevronRight} from "lucide-react";
 
-export const Accordeon: FC<PropsWithChildren<{ title: ReactNode; open?: boolean }>> = ({title, children, open: initial}) => {
+export const Accordeon: FC<PropsWithChildren<{ title: ReactNode; open?: boolean; noPadding?: boolean }>> = ({title, children, open: initial, noPadding}) => {
     const [open, setOpen] = useState(initial);
     
     return <>
@@ -9,6 +9,6 @@ export const Accordeon: FC<PropsWithChildren<{ title: ReactNode; open?: boolean 
             <ChevronRight className={`transition ${open ? "rotate-90" : ""}`} />
             {title}
         </div>
-        {open && <div className="p-2 flex flex-col">{children}</div>}
+        {open && <div className={`${noPadding ? "" : "p-2"} flex flex-col`}>{children}</div>}
     </>
 }
