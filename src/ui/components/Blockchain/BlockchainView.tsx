@@ -1,12 +1,12 @@
 import {FC, MutableRefObject, useContext, useEffect, useRef} from "react";
-import {Boxes, Link} from "lucide-react";
+import {Boxes, Link, ShieldCheck} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {useXarrow, Xwrapper} from "react-xarrows";
 import {useDraggable} from "react-use-draggable-scroll";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 
 export const BlockchainView: FC = () => {
-    const {selectedBlock, setSelectedBlock} = useContext(BlockchainContext)!;
+    const {selectedBlock, setSelectedBlock, strict, setStrict} = useContext(BlockchainContext)!;
 
     const ref = useRef<HTMLDivElement>(null);
     const {events} = useDraggable(ref as MutableRefObject<HTMLDivElement>);
@@ -17,12 +17,19 @@ export const BlockchainView: FC = () => {
             <h1>Blockchain</h1>
             <div className="h-[34px]"></div>
             <div className="grow"></div>
+            {selectedBlock !== null && <button
+                className={`flex items-center gap-2 toggle ${!strict ? "toggled" : ""}`}
+                onClick={() => setStrict(!strict)}
+            >
+                <Link/>
+                Kette
+            </button>}
             <button
                 className={`flex items-center gap-2 toggle ${selectedBlock === null ? "toggled" : "untoggled"}`}
                 onClick={() => setSelectedBlock(null)}
             >
-                <Link/>
-                Längste Kette
+                <ShieldCheck/>
+                Längste gültige Kette
             </button>
         </div>
         <div

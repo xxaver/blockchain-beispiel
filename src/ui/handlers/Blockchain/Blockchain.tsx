@@ -8,7 +8,8 @@ import {
     genesisBlock,
     getBlockChains,
     getContainingChain,
-    getMaxChain, uncomputeBlock
+    getMaxChain,
+    uncomputeBlock
 } from "../../../blockchain/BlockChain.ts";
 
 export const Blockchain: FC<PropsWithChildren> = ({children}) => {
@@ -16,14 +17,16 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
 
     const [blocks, setBlocks] = useState([genesisBlock])
     const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
+    const [strict, setStrict] = useState(false);
+
     const chains = useMemo(() => addAccountBalances({
         block: genesisBlock,
         children: getBlockChains(blocks, 1)
     }), [blocks]);
     const currentChain = useMemo(() => {
         if (selectedBlock === null) return getMaxChain(chains);
-        else return getContainingChain(chains, selectedBlock) || [];
-    }, [selectedBlock, chains])
+        else return getContainingChain(chains, selectedBlock, strict) || [];
+    }, [selectedBlock, chains, strict])
 
     useEvent("block", async (block: Block) => {
         const real = await computeBlock(block);
@@ -37,7 +40,7 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
     })
 
     return <BlockchainContext.Provider
-        value={{selectedBlock, setSelectedBlock, blocks, currentChain, chains}}
+        value={{selectedBlock, setSelectedBlock, blocks, currentChain, chains, strict, setStrict}}
     >
         {children}
     </BlockchainContext.Provider>

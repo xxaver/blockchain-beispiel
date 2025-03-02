@@ -89,16 +89,16 @@ export const addAccountBalances = (block: BlockChainBlock, balances: Record<stri
     return block;
 }
 
-export const getMaxChain = (block: BlockChainBlock): ComputedBlock[] => {
-    const all = block.children.filter(child => child.block.transactionsValid && child.block.proofOfWorkValid).map(getMaxChain);
+export const getMaxChain = (block: BlockChainBlock, check=true): ComputedBlock[] => {
+    const all = block.children.filter(child => !check || (child.block.transactionsValid && child.block.proofOfWorkValid)).map(e => getMaxChain(e, check));
     if (!all.length) return [block.block];
     const max = Math.max(...all.map(e => e.length));
     return [block.block, ...all.find(e => e.length === max)!];
 }
-export const getContainingChain = (block: BlockChainBlock, searchHash: string): ComputedBlock[] | null => {
-    if (block.block.hash === searchHash) return [block.block];
+export const getContainingChain = (block: BlockChainBlock, searchHash: string, strict=false): ComputedBlock[] | null => {
+    if (block.block.hash === searchHash) return strict ? [block.block] : getMaxChain(block, false);
     for (let i = 0; i < block.children.length; i++) {
-        const chain = getContainingChain(block.children[i], searchHash);
+        const chain = getContainingChain(block.children[i], searchHash, strict);
         if (chain) return [block.block, ...chain];
     }
     return null;

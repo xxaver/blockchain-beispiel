@@ -7,6 +7,8 @@ export const BlockchainContext = createContext<null | {
     setSelectedBlock: Dispatch<SetStateAction<string | null>>;
     blocks: ComputedBlock[];
     chains: BlockChainBlock;
+    strict: boolean;
+    setStrict: Dispatch<SetStateAction<boolean>>
 }>(null);
 
 export const useLastBlock = () => {
