@@ -2,9 +2,8 @@ import {FC, useContext} from "react";
 import {Signed, verify} from "../../../blockchain/Signed.ts";
 import {ArrowRight, Pickaxe} from "lucide-react";
 import {UsersContext} from "../../handlers/Users/UsersContext.tsx";
-import {usePromise} from "../../util.ts";
+import {parseJSON, usePromise} from "../../util.ts";
 import {Transaction} from "../../../blockchain/Transaction.ts";
-import {Error} from "./Error.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 
 export const TransactionTitle: FC<{ transaction: Transaction; withFee?: boolean }> = ({transaction, withFee}) => {
@@ -27,16 +26,5 @@ export const TransactionTitle: FC<{ transaction: Transaction; withFee?: boolean 
 }
 
 export const TransactionItem: FC<{ message: object }> = ({message}) => {
-    const transaction = usePromise(verify<Transaction>(message as Signed));
-
-    if (transaction === false) return "Nicht signierte Transaktion";
-    if (transaction === null) return "Überprüfen...";
-    return <TransactionTitle transaction={transaction} />
-}
-
-export const TransactionError: FC<{ message: object }> = ({message}) => {
-    const transaction = usePromise(verify<Transaction>(message as Signed));
-
-    if (transaction === false) return <Error>Nicht signierte Transaktion</Error>;
-    return null;
+    return <TransactionTitle transaction={parseJSON((message as Signed).data)} />
 }

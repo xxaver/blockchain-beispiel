@@ -19,9 +19,8 @@ export const toBinString = (str: string) => {
     const bytes = new Uint8Array(str2ab(str));
     return bytes.reduce((str, byte) => str + byte.toString(2).padStart(8, '0'), '');
 }
-export const verifyProofOfWork = async (block: Block, d=difficulty, log=false) => {
+export const verifyProofOfWork = async (block: Block, d=difficulty) => {
     const hash = await getBlockHash(block);
     const str = toBinString(hash);
-    if(log) console.log(str)
     return !str.slice(0, d).includes("1");
 }

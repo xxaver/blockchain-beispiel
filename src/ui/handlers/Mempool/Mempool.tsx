@@ -27,7 +27,6 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
     const {double, overspent, valid, invalid} = useMemo(() => {
         const signed = mempool.filter(e => e.isSigned);
         const allTransactions = [...block.pastTransactions];
-        console.log(allTransactions, block)
         const balances = {...block.balances};
         const valid: SignedTransaction[] = [], double: SignedTransaction[] = [], overspent: SignedTransaction[] = [], invalid: SignedTransaction[] = [];
         for(const t of signed) {

@@ -11,7 +11,7 @@ export const KnownEvents: {
     };
 } = {
     transaction: {
-        color: "text-yellow-800 bg-yellow-600/20",
+        color: "text-yellow-600 bg-yellow-600/20",
         title: TransactionItem,
         icon: <Coins/>
     },
