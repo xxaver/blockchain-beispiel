@@ -31,11 +31,10 @@ export const usePromise = <T>(promise: Promise<T>): T | null => {
     return value;
 }
 
-export const parseJSON = (json: string, normal=null) => {
+export const parseJSON = (json: string, normal = null) => {
     try {
         return JSON.parse(json);
-    }
-    catch {
+    } catch {
         return normal;
     }
 }
@@ -45,4 +44,15 @@ export const useLoaded = () => {
         setLoaded(true);
     }, []);
     return loaded;
+}
+export const sortedIndex = <T>(array: T[], value: number, key: (e: T) => number, descending = true) => {
+    let low = 0, high = array.length;
+
+    while (low < high) {
+        const mid = (low + high) >>> 1;
+        const v = key(array[mid]);
+        if (descending ? (v < value) : (v > value)) low = mid + 1;
+        else high = mid;
+    }
+    return low;
 }

@@ -2,7 +2,7 @@ import {FC, RefObject, useRef} from "react";
 import {BlockChainBlock} from "../../../blockchain/BlockChain.ts";
 import {BlockView} from "./BlockView.tsx";
 import Xarrow from "react-xarrows";
-import {useLoaded} from "../RawMessages/util.ts";
+import {useLoaded} from "../../util.ts";
 
 export const BlockWithChildrenView: FC<{
     block: BlockChainBlock;

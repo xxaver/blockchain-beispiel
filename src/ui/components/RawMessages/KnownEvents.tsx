@@ -1,6 +1,6 @@
 import {FC, ReactNode} from "react";
 import {Box, Coins, Search, UserRoundPlus} from "lucide-react";
-import {TransactionError, TransactionTitle} from "./TransactionTitle.tsx";
+import {TransactionError, TransactionItem} from "./TransactionItem.tsx";
 
 export const KnownEvents: {
     [key: string]: {
@@ -12,7 +12,7 @@ export const KnownEvents: {
 } = {
     transaction: {
         color: "text-yellow-800 bg-yellow-600/20",
-        title: TransactionTitle,
+        title: TransactionItem,
         error: TransactionError,
         icon: <Coins/>
     },
@@ -23,6 +23,7 @@ export const KnownEvents: {
         icon: <Box/>
     },
     discover: {
+        color: "text-green-600 bg-green-600/20",
         icon: <Search/>
     },
     join: {

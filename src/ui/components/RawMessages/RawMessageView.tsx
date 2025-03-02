@@ -1,7 +1,7 @@
 import {FC, ReactNode} from "react";
 import {ArrowUpRight, ShieldX} from "lucide-react";
 import {Message} from "../../handlers/Realtime/RealtimeContext.ts";
-import {wholeJson} from "./util.ts";
+import {wholeJson} from "../../util.ts";
 import {KnownEvents} from "./KnownEvents.tsx";
 
 export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({details, message}) => {
@@ -20,7 +20,8 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
             {icon}
             <Title message={message.payload} />
         </div>
-        <div className="grow p-4">
+        <div className="p-4">{message.event}</div>
+        <div className="grow px-4">
             <textarea
                 readOnly
                 className="resize-none h-full w-full font-mono"

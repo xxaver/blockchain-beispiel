@@ -1,7 +1,7 @@
 import {Block, getBlockHash} from "../../../blockchain/Block.ts";
 import {FC, useContext} from "react";
 import {Accordeon} from "../Accordeon.tsx";
-import {usePromise} from "../RawMessages/util.ts";
+import {usePromise} from "../../util.ts";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 
 export const BlockView: FC<{block: Block}> = ({block}) => {

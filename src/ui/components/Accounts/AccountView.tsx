@@ -1,7 +1,7 @@
 import {FC, useContext, useEffect, useState} from "react";
 import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 import {AccountTitle} from "./AccountTitle.tsx";
-import {HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
+import {Cpu, HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
 import {Accordeon} from "../Accordeon.tsx";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {produce, WritableDraft} from "immer";
@@ -56,23 +56,6 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
                 </button>
             </>}
         </div>
-        <div className="flex items-center gap-2 p-2">
-            <Pickaxe/>
-            Hashes/s
-            <div className="grow"></div>
-            {own ? <input type="text"
-                          value={computationalPower}
-                          onChange={e => {
-                              setComputationalPower(e.target.value)
-                          }}
-                          onBlur={() => {
-                              const int = parseFloat(computationalPower);
-                              if (!isNaN(int)) update((u) => {
-                                  u.computationalPower = int;
-                              });
-                          }}
-            /> : user.computationalPower}
-        </div>
         <Accordeon title={<><LockKeyholeOpen/> Public Key</>}>
             <textarea rows={10} readOnly value={user.publicKey}/>
         </Accordeon>
@@ -82,5 +65,24 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
         {own && <Accordeon open title={<><HandCoins /> Überweisen</>}>
             <MakeTransaction user={user} />
         </Accordeon>}
+        <Accordeon open title={<><Pickaxe /> Mining</>}>
+            <div className="flex items-center gap-2">
+                <Cpu/>
+                Hashes/s
+                <div className="grow"></div>
+                {own ? <input type="text"
+                              value={computationalPower}
+                              onChange={e => {
+                                  setComputationalPower(e.target.value)
+                              }}
+                              onBlur={() => {
+                                  const int = parseFloat(computationalPower);
+                                  if (!isNaN(int)) update((u) => {
+                                      u.computationalPower = int;
+                                  });
+                              }}
+                /> : user.computationalPower}
+            </div>
+        </Accordeon>
     </>
 }

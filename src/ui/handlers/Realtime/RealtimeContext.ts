@@ -15,7 +15,7 @@ export type Message = {
     event: string;
     payload: object;
 }
-export const useEvent = <T extends object>(event: string, handler: Handler<T>) => {
+export const useEvent = <T extends object>(event: string, handler: Handler<T>, allowOutgoing = false) => {
     const context = useContext(RealtimeContext);
     const handled = useRef(0);
 
@@ -23,9 +23,9 @@ export const useEvent = <T extends object>(event: string, handler: Handler<T>) =
         if (!context) return;
         for (let i = handled.current; i < context.messages.length; i++) {
             const message = context.messages[i];
-            if (event === message.event && !message.outgoing) handler(message.payload as never);
+            if (event === message.event && (!message.outgoing || allowOutgoing)) handler(message.payload as never);
         }
         handled.current = context.messages.length;
     }, [context, handler]);
-    
+
 }

@@ -20,7 +20,7 @@ export const Realtime: FC<PropsWithChildren<{
             type: "broadcast",
             event,
             payload: payload
-        }).then(() => setMessages([...messages, {event, payload, outgoing: true, timestamp: Date.now()}]))
+        }).then(() => setMessages(messages => [...messages, {event, payload, outgoing: true, timestamp: Date.now()}]))
     }
 
     useEffect(() => {

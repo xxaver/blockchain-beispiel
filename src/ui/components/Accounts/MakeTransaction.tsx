@@ -4,6 +4,7 @@ import {HandCoins} from "lucide-react";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {sign} from "../../../blockchain/Signed.ts";
 import {SuggestionInput} from "../SuggestionInput.tsx";
+import {Transaction} from "../../../blockchain/Transaction.ts";
 
 export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
     const {send} = useContext(RealtimeContext)!;
@@ -55,9 +56,11 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
 
                     send("transaction", await sign(JSON.stringify({
                         to: to.current,
+                        from: user.publicKey,
                         amount: amountFloat,
-                        fee: feeFloat
-                    }), user.publicKey, user.privateKey))
+                        fee: feeFloat,
+                        id: Date.now()
+                    } as Transaction), user.publicKey, user.privateKey))
                 }}
             >
                 <HandCoins/>

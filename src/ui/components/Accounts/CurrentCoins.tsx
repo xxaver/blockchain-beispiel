@@ -1,15 +1,15 @@
 import {FC} from "react";
-import {Coins} from "lucide-react";
+import {Bitcoin} from "lucide-react";
 
 export const CurrentCoins: FC<{
     publicKey?: string;
     coins?: number
 }> = ({coins}) => {
     const number = coins || 0;
-    
-    return <div className="bg-yellow-200 text-yellow-700 flex items-center rounded-4xl gap-2 p-2">
-        <Coins />
-        <span>{number}</span>
-        <span>$DK</span>
+
+    return <div className="bg-yellow-300 text-yellow-700 flex items-center rounded-xl p-2">
+        <span className="mr-2">{number}</span>
+        <Bitcoin/>
+        <span>DK</span>
     </div>
 }

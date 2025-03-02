@@ -24,7 +24,7 @@ export const SuggestionInput: FC<Omit<HTMLProps<HTMLInputElement>, "ref"> & {
         return () => document.removeEventListener("click", handler)
     }, []);
     
-    return <div className="relative w-100" ref={wrapperRef}>
+    return <div className="relative w-full" ref={wrapperRef}>
         <input {...props} type="text"
                value={value} onChange={e => setValue(e.target.value)}
                onFocus={() => setShown(true)}

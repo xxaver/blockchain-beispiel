@@ -23,8 +23,6 @@ export const exportKey = async (key: CryptoKey, format: "pkcs8" | "spki") => {
 
 export const importKey = async (key: string, format: "pkcs8" | "spki") => {
     const ab = str2ab(key);
-    console.log(ab);
-    console.log(new Uint8Array(ab));
     return window.crypto.subtle.importKey(format, ab, algorithm, true, [format === "spki" ? "verify" : "sign"]);
 }
 
