@@ -12,7 +12,7 @@ export const RawMessageList: FC = () => {
     const {messages: m} = useContext(RealtimeContext)!;
     const bottom = useRef<HTMLDivElement>(null);
     const list = useRef<HTMLDivElement>(null);
-    const [scroll, setScroll] = useState(false);
+    const [scrollable, setScrollable] = useState(false);
     const programmScroll = useRef(0);
     
     const messages = all ? m : m.filter(e => !(e.payload as {silent: boolean}).silent);
@@ -24,15 +24,15 @@ export const RawMessageList: FC = () => {
                     block: "end",
                     behavior: "smooth"
                 });
-                setScroll(false);
+                setScrollable(false);
                 programmScroll.current++;
                 setTimeout(() => programmScroll.current--, 300);
-            } else setScroll(true);
+            } else setScrollable(true);
             return autoscroll;
         })
     }, [messages]);
     useEffect(() => {
-        if (autoScroll) setScroll(false)
+        if (autoScroll) setScrollable(false)
     }, [autoScroll]);
 
     return <>
@@ -62,7 +62,7 @@ export const RawMessageList: FC = () => {
                     </div>
                 )}
                 <div ref={bottom}/>
-                {scroll && <div
+                {scrollable && <div
                     className="bg-blue-600 transition cursor-pointer hover:bg-blue-800 -translate-x-1/2 absolute bottom-5 left-1/2 flex items-center p-2 text-white rounded-4xl"
                     onClick={() => bottom.current?.scrollIntoView({
                         block: "end",

@@ -1,5 +1,5 @@
 import {toBinString} from "../../../blockchain/Block.ts";
-import {FC, useContext} from "react";
+import {FC, RefObject, useContext} from "react";
 import {Accordeon} from "../Accordeon.tsx";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 import {AlertCircle, MousePointer2} from "lucide-react";
@@ -10,11 +10,11 @@ import {ComputedBlock} from "../../../blockchain/BlockChain.ts";
 import {difficulty} from "../../config.ts";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 
-export const BlockView: FC<{ block: ComputedBlock }> = ({block}) => {
+export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivElement> }> = ({block, selected}) => {
     const {setSelectedBlock, currentChain} = useContext(BlockchainContext)!;
-
     const isSelected = currentChain.some(e => e.hash === block.hash);
     return <div
+        ref={currentChain.at(-1)?.hash === block.hash ? selected : null}
         className={`outline-1 p-2 w-full ${!block.transactionsValid ? "outline-red-600" : ""} ${isSelected ? "bg-green-200 text-green-700" : block.id === 0 ? "bg-blue-200 text-blue-600" : ""}`}>
         <div className="flex items-center gap-1 p-2 w-72">
             {block.id === 0

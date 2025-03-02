@@ -5,9 +5,10 @@ import Xarrow from "react-xarrows";
 import {useLoaded} from "../../util.ts";
 
 export const BlockWithChildrenView: FC<{
+    selected: RefObject<HTMLDivElement>;
     block: BlockChainBlock;
     prevRef?: RefObject<HTMLDivElement>
-}> = ({block, prevRef}) => {
+}> = ({block, prevRef, selected}) => {
     const ref = useRef<HTMLDivElement>(null);
     const loaded = useLoaded()
 
@@ -20,10 +21,10 @@ export const BlockWithChildrenView: FC<{
             end={ref}
         />}
         <div className="my-2 mx-4 w-full" ref={ref}>
-            <BlockView block={block.block}/>
+            <BlockView selected={selected} block={block.block}/>
         </div>
         <div>
-            {block.children.map((child, i) => <BlockWithChildrenView key={i} prevRef={ref} block={child}/>)}
+            {block.children.map((child, i) => <BlockWithChildrenView selected={selected} key={i} prevRef={ref} block={child}/>)}
         </div>
     </div>
 }
