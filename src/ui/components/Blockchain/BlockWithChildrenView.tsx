@@ -11,13 +11,13 @@ export const BlockWithChildrenView: FC<{
     const ref = useRef<HTMLDivElement>(null);
     const loaded = useLoaded()
 
-    return <div className="flex items-center w-max">
+    return <div className="flex items-center w-max h-full">
         {loaded && prevRef && <Xarrow
             strokeWidth={2}
             start={prevRef}
             end={ref}
         />}
-        <div className="my-2 mx-10 w-full" ref={ref}>
+        <div className="my-2 mx-4 w-full" ref={ref}>
             <BlockView block={block.block}/>
         </div>
         <div>

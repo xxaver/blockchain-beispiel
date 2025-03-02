@@ -35,10 +35,9 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
                     proofOfWork: currentPOW.current,
                 }
             }
-            if (await verifyProofOfWork(block, 5)) {
+            if (await verifyProofOfWork(block)) {
                 send("block", block);
             }
-            console.log(currentPOW.current)
             currentPOW.current++;
         }, 1000 / user.computationalPower)
     }, [user.computationalPower, user.publicKey, workingOn]);

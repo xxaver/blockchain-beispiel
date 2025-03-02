@@ -42,7 +42,7 @@ export const AccountList: FC = () => {
                 key={user.publicKey}>
                 <AccountTitle publicKey={user.publicKey}/>
             </div>)}
-            <h2 className="mt-10 p-2 flex items-center gap-2"><UserSearch/> Andere aktive Benutzer</h2>
+            <h2 className="mt-10 p-2 flex items-center gap-2 border-t border-gray-200"><UserSearch/> Andere aktive Benutzer</h2>
             {!otherUsers.length && <div className="p-2 text-center py-10 text-gray-400">Keine anderen Benutzer</div>}
             {otherUsers.map(user => <div
                 className="cursor-pointer p-2 item bg-white flex items-center gap-2"

@@ -7,7 +7,7 @@ export const CurrentCoins: FC<{
 }> = ({coins}) => {
     const number = coins || 0;
 
-    return <div className="bg-yellow-300 text-yellow-700 flex items-center rounded-xl p-2">
+    return <div className="bg-yellow-300 text-yellow-700 flex items-center rounded-xl px-2 py-1">
         <span className="mr-2">{number}</span>
         <Bitcoin/>
         <span>DK</span>

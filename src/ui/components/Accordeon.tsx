@@ -5,7 +5,7 @@ export const Accordeon: FC<PropsWithChildren<{ title: ReactNode; open?: boolean 
     const [open, setOpen] = useState(initial);
     
     return <>
-        <div className="item bg-white p-2 flex cursor-pointer items-center gap-2" onClick={() => setOpen(!open)}>
+        <div className="item bg-white p-2 flex cursor-pointer items-center gap-1 select-none" onClick={() => setOpen(!open)}>
             <ChevronRight className={`transition ${open ? "rotate-90" : ""}`} />
             {title}
         </div>

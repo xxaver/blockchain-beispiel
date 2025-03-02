@@ -1,5 +1,5 @@
 import {FC, MutableRefObject, useContext, useRef} from "react";
-import {Box, Boxes} from "lucide-react";
+import {Boxes, Link} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {Xwrapper} from "react-xarrows";
 import {useDraggable} from "react-use-draggable-scroll";
@@ -21,8 +21,8 @@ export const BlockchainView: FC = () => {
                 className={`flex items-center gap-2 toggle ${selectedBlock === null ? "toggled" : "untoggled"}`}
                 onClick={() => setSelectedBlock(null)}
             >
-                <Box/>
-                Neuester
+                <Link/>
+                Längste Kette
             </button>
         </div>
         <div

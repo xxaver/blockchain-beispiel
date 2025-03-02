@@ -4,7 +4,8 @@ export const genesisBlock: Block = {
     id: 0,
     prevHash: "",
     mined: null,
-    data: ""
+    data: "",
+    hash: ""
 }
 
 export interface BlockChainBlock {
@@ -12,9 +13,9 @@ export interface BlockChainBlock {
     children: BlockChainBlock[]
 }
 
-export const getBlockChains = (blocks: Block[], id = 0, prevHash = null): BlockChainBlock[] => {
-    return blocks.filter(block => block.id === id && block.id === prevHash)
-        .map<BlockChainBlock>(block => ({block, children: getBlockChains(blocks, id + 1, prevHash)}))
+export const getBlockChains = (blocks: Block[], id = 0, prevHash = ""): BlockChainBlock[] => {
+    return blocks.filter(block => block.id === id && block.prevHash === prevHash)
+        .map<BlockChainBlock>(block => ({block, children: getBlockChains(blocks, id + 1, block.hash)}))
 }
 export const getMaxChain = (block: BlockChainBlock): Block[] => {
     const all = block.children.map(getMaxChain);

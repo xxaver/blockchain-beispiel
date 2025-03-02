@@ -9,9 +9,7 @@ export const AccountTitle: FC<{ publicKey: string }> = ({publicKey}) => {
     if (!user) return null;
 
     return <>
-        <div className="cursor-pointer">
-            <div>{user.name}</div>
-        </div>
+        <div>{user.name}</div>
         <div className="grow"></div>
         <ComputationalPower publicKey={user.publicKey}/>
         <CurrentCoins publicKey={user.publicKey}/>
