@@ -24,7 +24,7 @@ input.invalid {
   text-align: center;
   color: white;
   @apply bg-blue-500;
-  transition: all .5s;
+  transition: all .3s;
   padding: 7px 10px;
   cursor: pointer;
   border-radius: 5px;
@@ -37,7 +37,7 @@ input.invalid {
 }
 button {
   padding: 5px;
-  transition: all .5s;
+  transition: all .3s;
   cursor: pointer;
   @apply rounded-md;
 }
@@ -56,10 +56,16 @@ button:not(:disabled):active {
   @apply px-2 py-1.5 rounded-md
 }
 .toggle.toggled {
-  @apply bg-blue-200 text-blue-600 
+  @apply bg-blue-200 text-blue-600
 }
 .toggle.toggled:hover {
   @apply bg-blue-300
+}
+.toggle.untoggled {
+  @apply bg-red-200 text-red-600
+}
+.toggle.untoggled:hover {
+  @apply bg-red-300
 }
 .item {
   transition: all .3s;
