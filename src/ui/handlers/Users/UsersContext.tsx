@@ -1,4 +1,5 @@
 import {createContext, Dispatch, SetStateAction, useContext} from "react";
+import {Block} from "../../../blockchain/Block.ts";
 
 export interface KnownUser {
     name: string;
@@ -7,6 +8,7 @@ export interface KnownUser {
 }
 export interface OwnUser extends KnownUser {
     privateKey: string;
+    workingOn?: Block
 }
 
 export const UsersContext = createContext<null | { 

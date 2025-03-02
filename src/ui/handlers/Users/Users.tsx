@@ -33,7 +33,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     }, [ownUsers]);
 
     return <UsersContext.Provider value={{knownUsers: [...ownUsers, ...knownUsers], ownUsers, setOwnUsers}}>
-        <MiningHandler />
+        {ownUsers.map(user => <MiningHandler user={user}/>)}
         {children}
     </UsersContext.Provider>
 }
