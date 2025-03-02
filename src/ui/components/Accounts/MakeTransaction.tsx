@@ -1,13 +1,15 @@
-import {FC, useContext, useState} from "react";
-import {OwnUser} from "../../handlers/Users/UsersContext.tsx";
+import {FC, useContext, useRef, useState} from "react";
+import {OwnUser, UsersContext} from "../../handlers/Users/UsersContext.tsx";
 import {HandCoins} from "lucide-react";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {sign} from "../../../blockchain/Signed.ts";
+import {SuggestionInput} from "../SuggestionInput.tsx";
 
 export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
     const {send} = useContext(RealtimeContext)!;
+    const {knownUsers} = useContext(UsersContext)!;
 
-    const [to, setTo] = useState("");
+    const to = useRef("")
     const [amount, setAmount] = useState("0");
     const [fee, setFee] = useState("0");
     const toOk = !!to;
@@ -20,8 +22,9 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
             <tr>
                 <td>Empfänger:</td>
                 <td className="py-2">
-                    <input placeholder="Public Key" className={"w-full " + (toOk ? "" : " invalid")} type="text"
-                           value={to} onChange={e => setTo(e.target.value)}/>
+                    <SuggestionInput suggestions={knownUsers.map(user => ({element: user.name, searchable: [user.publicKey, user.name]}))}
+                                     placeholder="Public Key" className={"w-full " + (toOk ? "" : " invalid")}
+                                     type="text" ref={to}/>
                 </td>
             </tr>
             <tr>
@@ -51,7 +54,7 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
                     if (isNaN(amountFloat) || isNaN(feeFloat)) return;
 
                     send("transaction", await sign(JSON.stringify({
-                        to,
+                        to: to.current,
                         amount: amountFloat,
                         fee: feeFloat
                     }), user.publicKey, user.privateKey))
