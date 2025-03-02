@@ -1,15 +1,15 @@
 import {str2ab, toBase64} from "./crypto.ts";
 import {difficulty} from "../ui/config.ts";
 
+export interface ProofOfWork {
+    proofOfWork: number;
+    publicKey: string;
+}
 export interface Block {
     id: number;
     prevHash: string;
-    mined: null | {
-        proofOfWork: number;
-        publicKey: string;
-    }
+    mined: null | ProofOfWork;
     data: string;
-    hash?: string;
 }
 export const getBlockHash = async (block: Block) => {
     const data = `${block.prevHash}${block.id}${block.data}${block.mined?.proofOfWork || ""}${block.mined?.publicKey || ""}`;

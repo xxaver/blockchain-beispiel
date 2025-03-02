@@ -1,12 +1,12 @@
-import {FC, MutableRefObject, useContext, useRef} from "react";
+import {FC, MutableRefObject, useContext, useEffect, useRef} from "react";
 import {Boxes, Link} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
-import {Xwrapper} from "react-xarrows";
+import {useXarrow, Xwrapper} from "react-xarrows";
 import {useDraggable} from "react-use-draggable-scroll";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 
 export const BlockchainView: FC = () => {
-    const {selectedBlock, setSelectedBlock, chains} = useContext(BlockchainContext)!;
+    const {selectedBlock, setSelectedBlock} = useContext(BlockchainContext)!;
 
     const ref = useRef<HTMLDivElement>(null);
     const {events} = useDraggable(ref as MutableRefObject<HTMLDivElement>);
@@ -30,8 +30,16 @@ export const BlockchainView: FC = () => {
             ref={ref}
             {...events}>
             <Xwrapper>
-                <BlockWithChildrenView block={chains}/>
+                <Inner/>
             </Xwrapper>
         </div>
     </>
+}
+const Inner: FC = () => {
+    const refresh = useXarrow()
+    const {chains} = useContext(BlockchainContext)!;
+    useEffect(() => {
+        refresh()
+    }, [chains]);
+    return <BlockWithChildrenView block={chains}/>;
 }

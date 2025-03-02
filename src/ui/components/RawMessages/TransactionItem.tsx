@@ -21,7 +21,6 @@ export const TransactionTitle: FC<{ transaction: Transaction; withFee?: boolean 
         {withFee && <>
             <div className="grow"></div>
             <Pickaxe />
-            Gebühr:
             <CurrentCoins coins={transaction.fee} />
         </>}
     </>

@@ -32,7 +32,7 @@ export const MiningView: FC<{publicKey: string}> = ({publicKey}) => {
     return <>
         <div className="flex items-center gap-2">
             <Cpu/>
-            Hashes/s
+            <span className="text-nowrap">Hashes/s</span>
             <div className="grow"></div>
             {own ? <input type="text"
                           value={computationalPower}

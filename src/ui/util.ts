@@ -31,7 +31,7 @@ export const usePromise = <T>(promise: Promise<T>): T | null => {
     return value;
 }
 
-export const parseJSON = (json: string, normal = null) => {
+export const parseJSON = (json: string, normal: unknown = null) => {
     try {
         return JSON.parse(json);
     } catch {

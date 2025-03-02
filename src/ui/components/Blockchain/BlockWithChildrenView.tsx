@@ -11,8 +11,10 @@ export const BlockWithChildrenView: FC<{
     const ref = useRef<HTMLDivElement>(null);
     const loaded = useLoaded()
 
-    return <div className="flex items-center w-max h-full">
+    return <div className="flex items-center w-max min-h-full">
         {loaded && prevRef && <Xarrow
+            startAnchor="right"
+            endAnchor="left"
             strokeWidth={2}
             start={prevRef}
             end={ref}

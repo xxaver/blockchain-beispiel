@@ -9,7 +9,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const [knownUsers, setKnownUsers] = useState<KnownUser[]>([]);
     const [ownUsers, setOwnUsers] = useState<OwnUser[]>([]);
     const {url} = useParams()!
-    
+
     const sendUsers = (users: OwnUser[]) => users.forEach(user => send("join", removePrivateKey(user)));
 
     useEvent("join", (data: KnownUser) => {
@@ -33,7 +33,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     }, [ownUsers]);
 
     return <UsersContext.Provider value={{knownUsers: [...ownUsers, ...knownUsers], ownUsers, setOwnUsers}}>
-        {ownUsers.map(user => <MiningHandler user={user}/>)}
+        {ownUsers.map(user => <MiningHandler user={user} key={user.publicKey}/>)}
         {children}
     </UsersContext.Provider>
 }

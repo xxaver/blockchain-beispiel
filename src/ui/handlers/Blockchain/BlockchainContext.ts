@@ -1,11 +1,15 @@
-import {createContext, Dispatch, SetStateAction} from "react";
-import {Block} from "../../../blockchain/Block.ts";
-import {BlockChainBlock} from "../../../blockchain/BlockChain.ts";
+import {createContext, Dispatch, SetStateAction, useContext} from "react";
+import {BlockChainBlock, ComputedBlock, genesisBlock} from "../../../blockchain/BlockChain.ts";
 
 export const BlockchainContext = createContext<null | {
     selectedBlock: string | null;
-    currentChain: Block[];
+    currentChain: ComputedBlock[];
     setSelectedBlock: Dispatch<SetStateAction<string | null>>;
-    blocks: Block[];
+    blocks: ComputedBlock[];
     chains: BlockChainBlock;
 }>(null);
+
+export const useLastBlock = () => {
+    const {currentChain} = useContext(BlockchainContext)!;
+    return currentChain.at(-1) || genesisBlock;
+}
