@@ -1,24 +1,12 @@
-import {FC, MutableRefObject, useRef, useState} from "react";
+import {FC, MutableRefObject, useContext, useRef} from "react";
 import {Box, Boxes} from "lucide-react";
-import {BlockChainBlock, genesisBlock} from "../../../blockchain/BlockChain.ts";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {Xwrapper} from "react-xarrows";
 import {useDraggable} from "react-use-draggable-scroll";
+import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 
 export const BlockchainView: FC = () => {
-    
-    const [autoNewest, setAutoNewest] = useState(true);
-    
-    const blockchain: BlockChainBlock = {
-        block: genesisBlock,
-        children: [{
-            block: genesisBlock,
-            children: [{block: genesisBlock, children: []}, {
-                block: genesisBlock,
-                children: [{block: genesisBlock, children: []}, {block: genesisBlock, children: []}]
-            }]
-        }, {block: genesisBlock, children: []}]
-    };
+    const {selectedBlock, setSelectedBlock, chains} = useContext(BlockchainContext)!;
 
     const ref = useRef<HTMLDivElement>(null);
     const {events} = useDraggable(ref as MutableRefObject<HTMLDivElement>);
@@ -30,10 +18,10 @@ export const BlockchainView: FC = () => {
             <div className="h-[34px]"></div>
             <div className="grow"></div>
             <button
-                className={`flex items-center gap-2 toggle ${autoNewest ? "toggled" : "untoggled"}`}
-                onClick={() => setAutoNewest(!autoNewest)}
+                className={`flex items-center gap-2 toggle ${selectedBlock === null ? "toggled" : "untoggled"}`}
+                onClick={() => setSelectedBlock(null)}
             >
-                <Box />
+                <Box/>
                 Neuester
             </button>
         </div>
@@ -42,7 +30,7 @@ export const BlockchainView: FC = () => {
             ref={ref}
             {...events}>
             <Xwrapper>
-                <BlockWithChildrenView block={blockchain}/>
+                <BlockWithChildrenView block={chains}/>
             </Xwrapper>
         </div>
     </>

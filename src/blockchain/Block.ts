@@ -8,6 +8,7 @@ export interface Block {
         publicKey: string;
     }
     data: string;
+    hash?: string;
 }
 export const getBlockHash = async (block: Block) => {
     const data = `${block.prevHash}${block.id}${block.data}${block.mined?.proofOfWork || ""}${block.mined?.publicKey || ""}`;
