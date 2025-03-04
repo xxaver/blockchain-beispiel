@@ -29,5 +29,6 @@ export const useUsername = (publicKey: string) => {
 export const removePrivateKey = (user: OwnUser) => {
     const copy = {...user}
     delete (copy as Partial<OwnUser>).privateKey;
+    delete (copy as Partial<OwnUser>).workingOn;
     return copy;
 }

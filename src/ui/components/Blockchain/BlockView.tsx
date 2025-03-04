@@ -11,11 +11,15 @@ import {difficulty} from "../../config.ts";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 
 export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivElement> }> = ({block, selected}) => {
-    const {setSelectedBlock, currentChain} = useContext(BlockchainContext)!;
+    const {setSelectedBlock, currentChain, withheldBlocks} = useContext(BlockchainContext)!;
     const isSelected = currentChain.some(e => e.hash === block.hash);
     return <div
         ref={currentChain.at(-1)?.hash === block.hash ? selected : null}
         className={`outline-1 p-2 w-full ${!block.transactionsValid ? "outline-red-600" : ""} ${isSelected ? "bg-green-200 text-green-700" : block.id === 0 ? "bg-blue-200 text-blue-600" : ""}`}>
+        {withheldBlocks.some(e => e.hash === block.hash) && <div className="flex items-center gap-2 text-red-600">
+            <img src="/blockchain-beispiel/hacker.svg" alt="" width={30} height={30}/>
+            Zurückgehalten
+        </div>}
         <div className="flex items-center gap-1 p-2 w-96">
             {block.id === 0
                 ? <>Genesis Block
@@ -33,7 +37,7 @@ export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivEl
                 </div>
                 <div className="grow"></div>
                 <div
-                    className="rounded-[100%] flex items-center text-center justify-center w-5 h-5 bg-blue-300 text-blue-700">
+                    className="circle">
                     {block.transactions.length}
                 </div>
                 <CurrentCoins coins={block.transactions.reduce((a, b) => a + b.fee, 0)}/>

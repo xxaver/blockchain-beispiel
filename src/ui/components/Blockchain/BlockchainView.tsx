@@ -1,12 +1,12 @@
 import {FC, MutableRefObject, RefObject, useContext, useEffect, useRef, useState} from "react";
-import {ArrowRight, Boxes, Link, ShieldCheck} from "lucide-react";
+import {ArrowRight, Boxes, Link, Send, ShieldCheck} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {useXarrow, Xwrapper} from "react-xarrows";
 import {useDraggable} from "react-use-draggable-scroll";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 
 export const BlockchainView: FC = () => {
-    const {selectedBlock, setSelectedBlock, strict, setStrict, currentChain} = useContext(BlockchainContext)!;
+    const {selectedBlock, setSelectedBlock, strict, setStrict, currentChain, withholdBlocks, setWithholdBlocks, withheldBlocks} = useContext(BlockchainContext)!;
     const [autoScroll, setAutoScroll] = useState(true)
     const [scrollable, setScrollable] = useState(false);
     const selected = useRef<HTMLDivElement>(null);
@@ -42,6 +42,16 @@ export const BlockchainView: FC = () => {
             <h1>Blockchain</h1>
             <div className="h-[34px]"></div>
             <div className="grow"></div>
+            <button
+                className={`flex items-center gap-2 toggle ${!withholdBlocks ? "toggled" : "untoggled"}`}
+                onClick={() => setWithholdBlocks(!withholdBlocks)}
+            >
+                <Send/>
+                {withholdBlocks ? <>
+                    Senden
+                    <div className="circle">{withheldBlocks.length}</div>
+                </> : "Auto"}
+            </button>
             {selectedBlock !== null && <button
                 className={`flex items-center gap-2 toggle ${!strict ? "toggled" : ""}`}
                 onClick={() => setStrict(!strict)}

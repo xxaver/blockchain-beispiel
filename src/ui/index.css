@@ -79,3 +79,6 @@ button:not(:disabled):active {
 textarea {
   @apply  rounded-lg p-2 bg-gray-100;
 }
+.circle {
+  @apply rounded-[100%] flex items-center text-center justify-center w-5 h-5 bg-blue-300 text-blue-700
+}

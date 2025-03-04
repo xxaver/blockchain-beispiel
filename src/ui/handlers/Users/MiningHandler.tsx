@@ -3,16 +3,14 @@ import {OwnUser, UsersContext} from "./UsersContext.tsx";
 import {BlockchainContext} from "../Blockchain/BlockchainContext.ts";
 import {MempoolContext} from "../Mempool/MempoolContext.ts";
 import {Block, verifyProofOfWork} from "../../../blockchain/Block.ts";
-import {RealtimeContext} from "../Realtime/RealtimeContext.ts";
 import {maxTransactions} from "../../config.ts";
 import {produce} from "immer";
 
 export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
     const {setOwnUsers} = useContext(UsersContext)!;
-    const {currentChain} = useContext(BlockchainContext)!;
+    const {currentChain, sendBlock} = useContext(BlockchainContext)!;
     const prevHash = currentChain.at(-1)?.hash || "";
     const {valid} = useContext(MempoolContext)!;
-    const {send} = useContext(RealtimeContext)!;
 
     const workingOn = useMemo<Block>(() => ({
         id: currentChain.length,
@@ -42,9 +40,7 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
                 const u = users.find(u => u.publicKey === user.publicKey)!;
                 if (u) u.workingOn = block;
             }))
-            if (await verifyProofOfWork(block)) {
-                send("block", block);
-            }
+            if (await verifyProofOfWork(block)) sendBlock(block);
             currentPOW.current++;
         }, 1000 / user.computationalPower)
     }, [user.computationalPower, user.publicKey, workingOn]);
