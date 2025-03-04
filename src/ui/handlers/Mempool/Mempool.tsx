@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, ReactNode, useMemo, useState} from "react";
+import {FC, PropsWithChildren, ReactNode, useEffect, useMemo, useState} from "react";
 import {isGenerallyValid, MempoolContext, SignedTransaction, TransactionStatus} from "./MempoolContext.ts";
 import {useEvent} from "../Realtime/RealtimeContext.ts";
 import {Signed, verify} from "../../../blockchain/Signed.ts";
@@ -42,6 +42,9 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
 
         return selected;
     }, [mempool, block]);
+    useEffect(() => {
+        if(auto) setChosen(autoSelected);
+    }, [autoSelected, auto]);
     const selected = auto ? autoSelected : chosen;
     
     const {double, overspent, valid, invalid} = useMemo(() => {

@@ -53,7 +53,7 @@ export const MempoolView: FC = () => {
         <div
             className="grow min-h-0 overflow-auto">
             {categories.map((category, key) => <div className={key ? "border-t border-gray-200" : ""} key={key}>
-                <Accordeon noPadding open={key <= 1} title={<>
+                <Accordeon noPadding open={true} title={<>
                     {category.title}
                     <div className="grow"></div>
                     {key === 0 && <>
