@@ -1,4 +1,4 @@
-import {FC, RefObject, useContext, useEffect, useRef, useState} from "react";
+import {FC, RefObject, useContext, useEffect, useReducer, useRef, useState} from "react";
 import {ArrowRight, Boxes, Link, MinusCircle, PlusCircle, Send, ShieldCheck} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {useXarrow, Xwrapper} from "react-xarrows";
@@ -20,6 +20,7 @@ export const BlockchainView: FC = () => {
     const [scrollable, setScrollable] = useState(false);
     const selected = useRef<HTMLDivElement>(null);
     const programmScroll = useRef(0);
+    const [_, reload] = useReducer(a => a + 1, 0);
 
     useEffect(() => {
         if (autoScroll) setScrollable(false)
@@ -40,6 +41,7 @@ export const BlockchainView: FC = () => {
 
     const ref = useRef<HTMLDivElement>(null);
     const updateScroll = () => {
+        reload();
         if (!ref.current || !selected.current) return;
 
         const elementRect = selected.current.getBoundingClientRect();
@@ -55,11 +57,19 @@ export const BlockchainView: FC = () => {
             setAutoScroll(true)
         } else if (programmScroll.current === 0) setAutoScroll(false);
     }
-    const scroll = () => selected.current?.scrollIntoView({
-        block: "center",
-        inline: "center",
-        behavior: "smooth"
-    })
+    const scroll = () => {
+        selected.current?.scrollIntoView({
+            block: "center",
+            inline: "center",
+            behavior: "smooth"
+        });
+        const interval = setInterval(reload, 10);
+        programmScroll.current++;
+        setTimeout(() => {
+            programmScroll.current--;
+            clearInterval(interval)
+        }, 1000)
+    }
 
     return <TransformWrapper
         onPanning={updateScroll}
@@ -115,11 +125,11 @@ export const BlockchainView: FC = () => {
             </div>}
             <div className="w-full h-full relative" ref={ref} onScroll={updateScroll}
             >
-                <TransformComponent>
-                    <Xwrapper>
-                        <Inner selected={selected}/>
-                    </Xwrapper>
-                </TransformComponent>
+                <Xwrapper>
+                    <TransformComponent>
+                        <Inner reload={_} selected={selected}/>
+                    </TransformComponent>
+                </Xwrapper>
             </div>
         </div>
     </TransformWrapper>
@@ -133,20 +143,21 @@ const Controls: FC<{scroll: () => void}> = ({scroll}) => {
         <>
             <button onClick={() => zoomOut()}><MinusCircle/></button>
             <button onClick={() => {
-                resetTransform()
-                setTimeout(() => scroll(), 200)
-            }}>{Math.round(zoom * 100)}%</button>
+                resetTransform();
+                setTimeout(scroll, 400);
+            }}>{Math.round(zoom * 100)}%
+            </button>
             <button onClick={() => zoomIn()}><PlusCircle/></button>
             <div className="w-5"></div>
         </>
     );
 }
-const Inner: FC<{ selected: RefObject<HTMLDivElement> }> = ({selected}) => {
+const Inner: FC<{ selected: RefObject<HTMLDivElement>; reload: number }> = ({selected, reload}) => {
     const refresh = useXarrow()
     const {chains} = useContext(BlockchainContext)!;
     useTransformEffect(refresh);
     useEffect(() => {
         refresh()
-    }, [chains]);
+    }, [reload]);
     return <BlockWithChildrenView block={chains} selected={selected}/>;
 }

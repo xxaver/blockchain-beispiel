@@ -43,7 +43,7 @@ export const Main: FC = () => {
                             {areas.map((e, i) => <Fragment key={i}>
                                 {!hidden.includes(i) &&
                                     <div
-                                        className={"min-h-0 w-96 border-l border-gray-200 flex flex-col " + (i === 0 ? "flex-3" : "flex-1")}>{e[1]}</div>}
+                                        className={`min-h-0 w-96 border-l border-gray-200 flex flex-col ` + (i === 0 ? "flex-3" : "flex-1 z-50 bg-white")}>{e[1]}</div>}
                             </Fragment>)}
                         </div>
                     </div>
