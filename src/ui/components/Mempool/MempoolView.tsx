@@ -1,5 +1,5 @@
 import {FC, useContext} from "react";
-import {ArrowLeftRight, Coins, Layers2, MousePointerClick, PiggyBank, ShieldCheck, ShieldX, Signature} from "lucide-react";
+import {ArrowLeftRight, Layers2, MousePointerClick, PiggyBank, ShieldCheck, ShieldX, Signature} from "lucide-react";
 import {MempoolContext} from "../../handlers/Mempool/MempoolContext.ts";
 import {TransactionView} from "./TransactionView.tsx";
 import {Accordeon} from "../Accordeon.tsx";
@@ -23,7 +23,7 @@ export const MempoolView: FC = () => {
         title: <div className="flex items-center gap-2 text-red-700"><Signature/> Nicht signiert</div>,
         data: notSigned
     }, {
-        title: <div className="flex items-center gap-2 text-red-700"><Layers2/> Durchgeführt</div>,
+        title: <div className="flex items-center gap-2 text-red-700"><Layers2/> Bereits Durchgeführt</div>,
         data: double
     }]
 
@@ -52,9 +52,8 @@ export const MempoolView: FC = () => {
                         <div className="text-center my-10 text-gray-400">Keine Transaktionen</div>}
                     {category.data.map((transaction) => <div
                         className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
-                        key={`${transaction.transaction.from}:${transaction.transaction.id}`}>
-                        <Coins/>
-                        <TransactionView transaction={transaction}/>
+                        key={JSON.stringify(transaction)}>
+                        <TransactionView withValid={key === 0} transaction={transaction}/>
                     </div>)}
                 </Accordeon></div>)}
         </div>

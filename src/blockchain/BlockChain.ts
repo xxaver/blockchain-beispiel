@@ -106,3 +106,11 @@ export const getContainingChain = (block: BlockChainBlock, searchHash: string, s
     }
     return null;
 }
+
+export const applyTransactions = (balances: Record<string, number>, transactions: Transaction[]) => {
+    transactions.forEach((t: Transaction) => {
+        balances[t.from] = (balances[t.from] || 0) - t.fee - t.amount;
+        balances[t.to] = (balances[t.to] || 0) + t.amount;
+    })
+    return balances;
+} 
