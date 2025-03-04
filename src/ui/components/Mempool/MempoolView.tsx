@@ -13,6 +13,7 @@ import {MempoolContext} from "../../handlers/Mempool/MempoolContext.ts";
 import {TransactionView} from "./TransactionView.tsx";
 import {Accordeon} from "../Accordeon.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
+import {maxTransactions} from "../../config.ts";
 
 export const MempoolView: FC = () => {
     const {valid, notSigned, double, overspent, invalid, auto, setAuto, chosen} = useContext(MempoolContext)!;
@@ -53,8 +54,9 @@ export const MempoolView: FC = () => {
         <div
             className="grow min-h-0 overflow-auto">
             {categories.map((category, key) => <div className={key ? "border-t border-gray-200" : ""} key={key}>
-                <Accordeon noPadding open={true} title={<>
+                <Accordeon noPadding open={key < categories.length - 1} title={<>
                     {category.title}
+                    {key === 0 && category.data.length > maxTransactions && <div className="bg-red-600 text-white rounded-xl py-1 px-2">max {maxTransactions}</div>}
                     <div className="grow"></div>
                     {key === 0 && <>
                         <Pickaxe className="text-yellow-600" />

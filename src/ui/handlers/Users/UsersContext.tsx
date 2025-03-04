@@ -23,7 +23,7 @@ export const useUser = (publicKey: string) => {
 export const useUsername = (publicKey: string) => {
     const {knownUsers} = useContext(UsersContext)!;
     const user = knownUsers.find(e => e.publicKey === publicKey);
-    return user?.name || publicKey.slice(15) + "...";
+    return user?.name || (publicKey.slice(0, 15) + "...");
 }
 
 export const removePrivateKey = (user: OwnUser) => {

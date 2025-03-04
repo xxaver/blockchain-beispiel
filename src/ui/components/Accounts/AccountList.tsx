@@ -51,7 +51,7 @@ export const AccountList: FC = () => {
                 <AccountTitle publicKey={user.publicKey}/>
             </div>)}
         </div>
-        {selected && <div className="flex-1 border-t border-gray-200 flex flex-col bg-white">
+        {selected && <div className="flex-1 border-t border-gray-200 flex flex-col bg-white min-h-0 overflow-auto">
             <AccountView publicKey={selected}/>
         </div>}
     </>

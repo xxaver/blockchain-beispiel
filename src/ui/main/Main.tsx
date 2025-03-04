@@ -18,7 +18,7 @@ const areas = [
 
 export const Main: FC = () => {
     const {key, url} = useParams()
-    const [hidden, setHidden] = useState<number[]>([]);
+    const [hidden, setHidden] = useState<number[]>([3]);
 
     useEffect(() => {
         localStorage.setItem("default", JSON.stringify({key, url}));

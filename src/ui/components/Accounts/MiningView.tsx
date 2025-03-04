@@ -67,7 +67,7 @@ export const MiningView: FC<{ publicKey: string }> = ({publicKey}) => {
             </table>
         </div>
         {own && <div>
-            <div className="mt-5 p-2">Enthaltene Transaktionen</div>
+            <div className="mt-1 p-3">Enthaltene Transaktionen</div>
             {transactions
                 .map((e: Signed, i: number) => <div
                     className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600">

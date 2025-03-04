@@ -2,16 +2,15 @@ import {CurrentCoins} from "./CurrentCoins.tsx";
 import {FC} from "react";
 import {ComputationalPower} from "./ComputationalPower.tsx";
 
-import {useUser} from "../../handlers/Users/UsersContext.tsx";
+import {useUsername} from "../../handlers/Users/UsersContext.tsx";
 
 export const AccountTitle: FC<{ publicKey: string }> = ({publicKey}) => {
-    const user = useUser(publicKey);
-    if (!user) return null;
+    const name = useUsername(publicKey);
 
     return <>
-        <div className="text-black">{user.name}</div>
+        <div className="text-black">{name}</div>
         <div className="grow"></div>
-        <ComputationalPower publicKey={user.publicKey}/>
-        <CurrentCoins publicKey={user.publicKey}/>
+        <ComputationalPower publicKey={publicKey}/>
+        <CurrentCoins publicKey={publicKey}/>
     </>
 }

@@ -47,17 +47,17 @@ export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivEl
                 </>}
             </>}>
                 {block.transactions.map((transaction: Transaction, i: number) => <div key={i}
-                                                                                      className="flex items-center gap-1">
+                                                                                      className="flex items-center gap-1 py-1">
                     <TransactionTitle withFee transaction={transaction}/>
                 </div>)}
                 {!block.transactions.length && <div className="text-center text-gray-400 py-5">
                     Keine Transaktionen
                 </div>}
             </Accordeon>
-            <Accordeon title="Vorheriger Hash">
-                <textarea readOnly value={block.prevHash}/>
-            </Accordeon>
             <Accordeon title="Hash">
+                <div className="p-2">Vorheriger:</div>
+                <textarea readOnly value={block.prevHash}/>
+                <div className="p-2">Dieser:</div>
                 <textarea readOnly value={block.hash}/>
             </Accordeon>
             <Accordeon title={<>

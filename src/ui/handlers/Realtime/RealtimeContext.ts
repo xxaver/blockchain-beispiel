@@ -28,7 +28,7 @@ export const useEvent = <T extends object>(event: string, handler: Handler<T>, a
             if(message.outgoing && !allowOutgoing) continue
             
             if(knownEvents[event]) {
-                const asJson = wholeJson(message);
+                const asJson = wholeJson(message.payload);
                 const result = knownEvents[event].safeParse(asJson);
                 if(!result.success) continue;
             }
