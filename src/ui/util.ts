@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const wholeJson = (json: unknown): any => {
-    return json;
     if (typeof json === "string") {
         try {
             return wholeJson(JSON.parse(json));
