@@ -28,16 +28,32 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
 
     const notSigned = mempool.filter(e => !e.isSigned);
 
+    const autoSelected = useMemo(() => {
+        const selected: SignedTransaction[] = [];
+        const balances = {...block.balances};
+        for(const t of mempool) {
+            const {transaction} = t;
+            if(!t.isSigned || transaction.fee < 0 || transaction.amount < 0) continue;
+            if(selected.length >= maxTransactions) break;
+            if(balances[transaction.from] < transaction.amount + transaction.fee) continue;
+            applyTransactions(balances, [transaction]);
+            selected.push(t);
+        }
+
+        return selected;
+    }, [mempool, block]);
+    const selected = auto ? autoSelected : chosen;
+    
     const {double, overspent, valid, invalid} = useMemo(() => {
         const signed = mempool.filter(e => e.isSigned);
-        const allTransactions = [...block.pastTransactions, ...chosen.map(e => e.transaction)];
+        const allTransactions = [...block.pastTransactions, ...selected.map(e => e.transaction)];
         const balances = applyTransactions({...block.balances}, allTransactions);
         
         const valid: SignedTransaction[] = [], double: SignedTransaction[] = [], overspent: SignedTransaction[] = [],
             invalid: SignedTransaction[] = [];
         
         for (const t of signed) {
-            if(chosen.includes(t)) continue;
+            if(selected.includes(t)) continue;
             const {transaction} = t;
             if (transaction.fee < 0 || transaction.amount < 0) invalid.push(t);
             else if (allTransactions.some(t => t.id === transaction.id && t.from === transaction.from)) double.push(t);
@@ -45,22 +61,9 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
             else valid.push(t);
         }
         return {valid, double, overspent, invalid};
-    }, [block, mempool, chosen]);
+    }, [block, mempool, selected]);
     
-    const autoSelected = useMemo(() => {
-        const selected: SignedTransaction[] = [];
-        const balances = {...block.balances};
-        for(const t of valid) {
-            const {transaction} = t;
-            if(selected.length >= maxTransactions) break;
-            if(balances[transaction.from] < transaction.amount + transaction.fee) continue;
-            applyTransactions(balances, [transaction]);
-            selected.push(t);
-        }
-        
-        return selected;
-    }, [valid]);
-    const selected = auto ? autoSelected : chosen;
+
     const chosenStatus = useMemo(() => {
         const balances = {...block.balances};
         const status: TransactionStatus[] = [];
@@ -75,7 +78,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
             if(icon) status.push({transaction: t, icon})
         }
         return status;
-    }, [selected]);
+    }, [selected, block]);
 
     return <MempoolContext.Provider
         value={{

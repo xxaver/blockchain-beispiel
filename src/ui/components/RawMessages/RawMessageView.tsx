@@ -19,6 +19,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
         <div className={`flex items-center p-2 gap-2 ${color}`}>
             {icon}
             <Title message={message.payload} />
+            <ArrowUpRight size={25} className={message.outgoing ? "" : "opacity-0"}/>
         </div>
         <div className="p-4">{message.event}</div>
         <div className="grow px-4">
@@ -43,6 +44,6 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
         {icon}
         <Title message={message.payload} />
         <div className="grow"/>
-        {message.outgoing && <ArrowUpRight size={25}/>}
+        <ArrowUpRight size={25} className={message.outgoing ? "" : "opacity-0"}/>
     </div>
 }

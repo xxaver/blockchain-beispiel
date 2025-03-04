@@ -1,8 +1,18 @@
 import {FC, useContext} from "react";
-import {ArrowLeftRight, Layers2, MousePointerClick, PiggyBank, ShieldCheck, ShieldX, Signature} from "lucide-react";
+import {
+    ArrowLeftRight,
+    Layers2,
+    MousePointerClick,
+    Pickaxe,
+    PiggyBank,
+    ShieldCheck,
+    ShieldX,
+    Signature
+} from "lucide-react";
 import {MempoolContext} from "../../handlers/Mempool/MempoolContext.ts";
 import {TransactionView} from "./TransactionView.tsx";
 import {Accordeon} from "../Accordeon.tsx";
+import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 
 export const MempoolView: FC = () => {
     const {valid, notSigned, double, overspent, invalid, auto, setAuto, chosen} = useContext(MempoolContext)!;
@@ -46,6 +56,10 @@ export const MempoolView: FC = () => {
                 <Accordeon noPadding open={key <= 1} title={<>
                     {category.title}
                     <div className="grow"></div>
+                    {key === 0 && <>
+                        <Pickaxe className="text-yellow-600" />
+                        <CurrentCoins coins={category.data.reduce((a, b) => a + b.transaction.fee, 0)}/>
+                    </>}
                     <div className="circle">{category.data.length}</div>
                 </>}>
                     {!category.data.length &&

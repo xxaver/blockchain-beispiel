@@ -18,7 +18,7 @@ export const TransactionTitle: FC<{ transaction: Transaction; withFee?: boolean 
         <ArrowRight/>
         {transaction && getName(transaction.to)}
         {withFee && <>
-            <div className="grow"></div>
+            <div className="grow-[10000]"></div>
             <Pickaxe/>
             <CurrentCoins coins={transaction.fee}/>
         </>}
@@ -26,5 +26,5 @@ export const TransactionTitle: FC<{ transaction: Transaction; withFee?: boolean 
 }
 
 export const TransactionItem: FC<{ message: object }> = ({message}) => {
-    return <TransactionTitle transaction={parseJSON((message as Signed).data)}/>
+    return <TransactionTitle withFee transaction={parseJSON((message as Signed).data)}/>
 }
