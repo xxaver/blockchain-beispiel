@@ -1,10 +1,12 @@
-import {FC, useContext, useMemo, useState} from "react";
+import {FC, useContext, useMemo, useRef, useState} from "react";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {CircleAlert, Send} from "lucide-react";
+import {SuggestionInput} from "../SuggestionInput.tsx";
+import {knownEvents} from "../../handlers/Realtime/events.ts";
 
 export const NewMessage: FC<{ close: () => void }> = ({close}) => {
     const {send} = useContext(RealtimeContext)!;
-    const [event, setEvent] = useState("");
+    const event = useRef("")
     const [value, setValue] = useState("{}");
     const error = useMemo(() => {
         try {
@@ -17,7 +19,10 @@ export const NewMessage: FC<{ close: () => void }> = ({close}) => {
     return <div className="flex flex-col h-full">
         <div className="p-2">Neue Nachricht</div>
         <div className="grow p-4 flex flex-col items-stretch gap-3">
-            <input placeholder="Event" type="text" value={event} onChange={e => setEvent((e.target as HTMLInputElement).value)}/>
+            <SuggestionInput ref={event} suggestions={Object.keys(knownEvents).map(e => ({
+                element: e,
+                searchable: [e]
+            }))} placeholder="Event" className="w-full" />
         <textarea
             onChange={e => setValue(e.target.value)}
             onBlur={() => {
@@ -35,7 +40,7 @@ export const NewMessage: FC<{ close: () => void }> = ({close}) => {
             </div>
             <button disabled={!!error} className="flex items-center gap-2 primary" onClick={() => {
                 const json = JSON.parse(value);
-                send(event, json)
+                send(event.current, json)
                 close();
             }}>
                 Senden
