@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode, useMemo, useState} from "react";
-import {MempoolContext, SignedTransaction, TransactionStatus} from "./MempoolContext.ts";
+import {isGenerallyValid, MempoolContext, SignedTransaction, TransactionStatus} from "./MempoolContext.ts";
 import {useEvent} from "../Realtime/RealtimeContext.ts";
 import {Signed, verify} from "../../../blockchain/Signed.ts";
 import {parseJSON, sortedIndex} from "../../util.ts";
@@ -33,7 +33,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
         const balances = {...block.balances};
         for(const t of mempool) {
             const {transaction} = t;
-            if(!t.isSigned || transaction.fee < 0 || transaction.amount < 0) continue;
+            if(!isGenerallyValid(t)) continue;
             if(selected.length >= maxTransactions) break;
             if(balances[transaction.from] < transaction.amount + transaction.fee) continue;
             applyTransactions(balances, [transaction]);
@@ -46,7 +46,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
     
     const {double, overspent, valid, invalid} = useMemo(() => {
         const signed = mempool.filter(e => e.isSigned);
-        const allTransactions = [...block.pastTransactions, ...selected.map(e => e.transaction)];
+        const allTransactions = [...block.pastTransactions, ...selected.filter(isGenerallyValid).map(e => e.transaction)];
         const balances = applyTransactions({...block.balances}, allTransactions);
         
         const valid: SignedTransaction[] = [], double: SignedTransaction[] = [], overspent: SignedTransaction[] = [],
@@ -74,7 +74,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
             if(transaction.fee < 0 || transaction.amount < 0) icon = <ShieldX className="text-red-600" />;
             else if(!t.isSigned) icon = <Signature className="text-red-600" />
             else if(balances[transaction.from] < transaction.amount + transaction.fee) icon = <PiggyBank className="text-red-600" />
-            applyTransactions(balances, [transaction]);
+            else applyTransactions(balances, [transaction]);
             if(icon) status.push({transaction: t, icon})
         }
         return status;
@@ -84,7 +84,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
         value={{
             mempool,
             notSigned,
-            valid,
+            valid: [...valid, ...selected.filter(a => !chosenStatus.some(b => b.transaction === a))],
             overspent,
             double,
             invalid,

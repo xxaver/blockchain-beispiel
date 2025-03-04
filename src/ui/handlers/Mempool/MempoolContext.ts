@@ -33,3 +33,4 @@ export const getSignedTransaction = async (signed: Signed) => {
     const transaction = parseJSON(signed.data);
     return {transaction, signed, isSigned: !!valid}
 }
+export const isGenerallyValid = (transaction: SignedTransaction) => transaction.isSigned && (transaction.transaction.fee >= 0 && transaction.transaction.amount >= 0);
