@@ -2,7 +2,7 @@ import {toBinString} from "../../../blockchain/Block.ts";
 import {FC, RefObject, useContext} from "react";
 import {Accordeon} from "../Accordeon.tsx";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
-import {AlertCircle, MousePointer2} from "lucide-react";
+import {AlertCircle, MousePointerClick} from "lucide-react";
 import {AccountTitle} from "../Accounts/AccountTitle.tsx";
 import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {Transaction} from "../../../blockchain/Transaction.ts";
@@ -27,7 +27,7 @@ export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivEl
                 </>
                 : <>#{block.id} {block.mined?.publicKey && <AccountTitle publicKey={block.mined.publicKey}/>}</>}
             <button onClick={() => setSelectedBlock(block.hash)}>
-                <MousePointer2/>
+                <MousePointerClick/>
             </button>
         </div>
         {block.id !== 0 && <div className="text-black bg-white text-sm">

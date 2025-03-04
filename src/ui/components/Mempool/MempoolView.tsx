@@ -1,46 +1,62 @@
 import {FC, useContext} from "react";
-import {ArrowLeftRight, Coins, Layers2, PiggyBank, ShieldCheck, ShieldX, Signature} from "lucide-react";
+import {ArrowLeftRight, Coins, Layers2, MousePointerClick, PiggyBank, ShieldCheck, ShieldX, Signature} from "lucide-react";
 import {MempoolContext} from "../../handlers/Mempool/MempoolContext.ts";
-import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
+import {TransactionView} from "./TransactionView.tsx";
+import {Accordeon} from "../Accordeon.tsx";
 
 export const MempoolView: FC = () => {
-    const {valid, notSigned, double, overspent, invalid} = useContext(MempoolContext)!;
+    const {valid, notSigned, double, overspent, invalid, auto, setAuto, chosen} = useContext(MempoolContext)!;
 
     const categories = [{
-        title: <div className="p-2 flex items-center gap-2 text-green-700"><ShieldCheck/> Gültig</div>,
+        title: <div className="flex items-center gap-2 text-green-700"><MousePointerClick/> Ausgewählt</div>,
+        data: chosen
+    }, {
+        title: <div className="flex items-center gap-2 text-green-700"><ShieldCheck/> Gültig</div>,
         data: valid
     }, {
-        title: <div className="p-2 flex items-center gap-2 text-red-700"><ShieldX/> Ungültig</div>,
+        title: <div className="flex items-center gap-2 text-red-700"><ShieldX/> Ungültig</div>,
         data: invalid
     }, {
-        title: <div className="p-2 flex items-center gap-2 text-red-700"><PiggyBank/> Nicht genug Guthaben</div>,
+        title: <div className="flex items-center gap-2 text-red-700"><PiggyBank/> Nicht genug Guthaben</div>,
         data: overspent
     }, {
-        title: <div className="p-2 flex items-center gap-2 text-red-700"><Signature/> Nicht signiert</div>,
+        title: <div className="flex items-center gap-2 text-red-700"><Signature/> Nicht signiert</div>,
         data: notSigned
     }, {
-        title: <div className="p-2 flex items-center gap-2 text-red-700"><Layers2/> Durchgeführt</div>,
+        title: <div className="flex items-center gap-2 text-red-700"><Layers2/> Durchgeführt</div>,
         data: double
     }]
 
     return <>
         <div className="p-2 border-b border-gray-200 flex items-center gap-2">
             <ArrowLeftRight/>
-            <h1>Ausstehende Transaktionen</h1>
-            <div className="h-[34px]"></div>
+            <h1>Mempool</h1>
+            <div className="grow"/>
+            <button
+                className={`flex items-center gap-2 toggle ${auto ? "toggled" : ""}`}
+                onClick={() => setAuto(!auto)}
+            >
+                <MousePointerClick/>
+                Auto
+            </button>
         </div>
         <div
             className="grow min-h-0 overflow-auto">
             {categories.map((category, key) => <div className={key ? "border-t border-gray-200" : ""} key={key}>
-                {category.title}
-                {!category.data.length && <div className="text-center my-10 text-gray-400">Keine Transaktionen</div>}
-                {category.data.map(({transaction}) => <div
-                    className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
-                    key={`${transaction.from}:${transaction.id}`}>
-                    <Coins/>
-                    <TransactionTitle withFee transaction={transaction}/>
-                </div>)}
-            </div>)}
+                <Accordeon noPadding open={key <= 1} title={<>
+                    {category.title}
+                    <div className="grow"></div>
+                    <div className="circle">{category.data.length}</div>
+                </>}>
+                    {!category.data.length &&
+                        <div className="text-center my-10 text-gray-400">Keine Transaktionen</div>}
+                    {category.data.map((transaction) => <div
+                        className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
+                        key={`${transaction.transaction.from}:${transaction.transaction.id}`}>
+                        <Coins/>
+                        <TransactionView transaction={transaction}/>
+                    </div>)}
+                </Accordeon></div>)}
         </div>
     </>
 }

@@ -12,7 +12,7 @@ import {MempoolView} from "../components/Mempool/MempoolView.tsx";
 
 const areas = [
     [<><Boxes/> Blockchain</>, <BlockchainView/>],
-    [<><ArrowLeftRight/> Ausstehend</>, <MempoolView/>],
+    [<><ArrowLeftRight/> Mempool</>, <MempoolView/>],
     [<><UserSearch/> Konten</>, <AccountList/>],
     [<><Network/> Übertragung</>, <RawMessageList/>]]
 

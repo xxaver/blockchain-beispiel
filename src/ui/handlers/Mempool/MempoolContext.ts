@@ -1,6 +1,7 @@
-import {createContext} from "react";
-import {Signed} from "../../../blockchain/Signed.ts";
+import {createContext, Dispatch, SetStateAction} from "react";
+import {Signed, verify} from "../../../blockchain/Signed.ts";
 import {Transaction} from "../../../blockchain/Transaction.ts";
+import {parseJSON} from "../../util.ts";
 
 export interface SignedTransaction {
     signed: Signed;
@@ -15,4 +16,14 @@ export const MempoolContext = createContext<null | {
     notSigned: SignedTransaction[];
     overspent: SignedTransaction[];
     invalid: SignedTransaction[];
+    chosen: SignedTransaction[];
+    setChosen: Dispatch<SetStateAction<SignedTransaction[]>>
+    auto: boolean;
+    setAuto: Dispatch<SetStateAction<boolean>>
 }>(null);
+
+export const getSignedTransaction = async (signed: Signed) => {
+    const valid = await verify(signed);
+    const transaction = parseJSON(signed.data);
+    return {transaction, signed, isSigned: !!valid}
+}

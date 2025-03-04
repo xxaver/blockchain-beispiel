@@ -8,6 +8,8 @@ import {useLastBlock} from "../Blockchain/BlockchainContext.ts";
 
 export const Mempool: FC<PropsWithChildren> = ({children}) => {
     const [mempool, setMempool] = useState<SignedTransaction[]>([]);
+    const [chosen, setChosen] = useState<SignedTransaction[]>([])
+    const [auto, setAuto] = useState(true);
     const block = useLastBlock();
     
     useEvent("transaction", (signed: Signed) => {
@@ -40,9 +42,9 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
         }
         return {valid, double, overspent, invalid};
     }, [block, mempool]);
-
+    
     return <MempoolContext.Provider
-        value={{mempool, notSigned, valid, overspent, double, invalid}}
+        value={{mempool, notSigned, valid, overspent, double, invalid, auto, chosen, setChosen, setAuto}}
     >
         {children}
     </MempoolContext.Provider>

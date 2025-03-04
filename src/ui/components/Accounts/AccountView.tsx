@@ -62,7 +62,7 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
         {own && <Accordeon open title={<><HandCoins/> Überweisen</>}>
             <MakeTransaction user={user}/>
         </Accordeon>}
-        <Accordeon open title={<><Pickaxe/> Mining</>}>
+        <Accordeon noPadding open title={<><Pickaxe/> Mining</>}>
             <MiningView publicKey={publicKey} />
         </Accordeon>
         <Accordeon noPadding title={<><ArrowLeftRight/> Transaktionen</>}>

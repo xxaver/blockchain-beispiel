@@ -30,7 +30,7 @@ export const SuggestionInput: FC<Omit<HTMLProps<HTMLInputElement>, "ref"> & {
                onFocus={() => setShown(true)}
         />
         {!!matching.length && shown && <div className="w-full cursor-pointer absolute border-1 border-gray-400 rounded-md shadow-md">
-            {matching.map(e => <div className="item p-2 bg-white" onClick={() => {
+            {matching.map(e => <div key={JSON.stringify(e.searchable)} className="item p-2 bg-white" onClick={() => {
                 setValue(e.searchable[0])
                 setShown(false)
             }}>

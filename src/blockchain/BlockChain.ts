@@ -35,18 +35,21 @@ export interface BlockChainBlock {
     children: BlockChainBlock[]
 }
 
-export const computeBlock = async (block: Block): Promise<ComputedBlock> => ({
-    ...block,
-    hash: await getBlockHash(block),
-    transactions: await Promise.all(parseJSON(block.data).map(
-        async (e: Signed) => ({...parseJSON(e.data, {}), isValid: true, isSigned: !!await verify(e)}))
-    ),
-    balances: {},
-    pastTransactions: [],
-    transactionsValid: true,
-    proofOfWorkValid: await verifyProofOfWork(block),
-    mined: block.mined!
-})
+export const computeBlock = async (block: Block): Promise<ComputedBlock> => {
+    if(block.id === 0) return genesisBlock;
+    return ({
+        ...block,
+        hash: await getBlockHash(block),
+        transactions: await Promise.all(parseJSON(block.data).map(
+            async (e: Signed) => ({...parseJSON(e.data, {}), isValid: true, isSigned: !!await verify(e)}))
+        ),
+        balances: {},
+        pastTransactions: [],
+        transactionsValid: true,
+        proofOfWorkValid: await verifyProofOfWork(block),
+        mined: block.mined!
+    })
+}
 export const uncomputeBlock = (block: ComputedBlock): Block => ({
     mined: block.mined,
     id: block.id,

@@ -43,7 +43,6 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
             })
         }
     }, [withholdBlocks, withheldBlocks]);
-    console.log(blocks, withheldBlocks)
 
     const chains = useMemo(() => addAccountBalances({
         block: genesisBlock,
