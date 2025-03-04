@@ -1,30 +1,35 @@
-import {FC, MutableRefObject, RefObject, useContext, useEffect, useRef, useState} from "react";
-import {ArrowRight, Boxes, Link, Send, ShieldCheck} from "lucide-react";
+import {FC, RefObject, useContext, useEffect, useRef, useState} from "react";
+import {ArrowRight, Boxes, Link, MinusCircle, PlusCircle, Send, ShieldCheck} from "lucide-react";
 import {BlockWithChildrenView} from "./BlockWithChildrenView.tsx";
 import {useXarrow, Xwrapper} from "react-xarrows";
-import {useDraggable} from "react-use-draggable-scroll";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
+import {TransformComponent, TransformWrapper, useControls, useTransformEffect} from "react-zoom-pan-pinch";
 
 export const BlockchainView: FC = () => {
-    const {selectedBlock, setSelectedBlock, strict, setStrict, currentChain, withholdBlocks, setWithholdBlocks, withheldBlocks} = useContext(BlockchainContext)!;
+    const {
+        selectedBlock,
+        setSelectedBlock,
+        strict,
+        setStrict,
+        currentChain,
+        withholdBlocks,
+        setWithholdBlocks,
+        withheldBlocks
+    } = useContext(BlockchainContext)!;
     const [autoScroll, setAutoScroll] = useState(true)
     const [scrollable, setScrollable] = useState(false);
     const selected = useRef<HTMLDivElement>(null);
     const programmScroll = useRef(0);
-    
+
     useEffect(() => {
         if (autoScroll) setScrollable(false)
     }, [autoScroll]);
-    
+
     const last = currentChain.at(-1);
     useEffect(() => {
         setAutoScroll(autoscroll => {
             if (autoScroll && selected.current) {
-                selected.current.scrollIntoView({
-                    block: "center",
-                    inline: "center",
-                    behavior: "smooth"
-                });
+                scroll()
                 setScrollable(false);
                 programmScroll.current++;
                 setTimeout(() => programmScroll.current--, 300);
@@ -34,14 +39,42 @@ export const BlockchainView: FC = () => {
     }, [last]);
 
     const ref = useRef<HTMLDivElement>(null);
-    const {events} = useDraggable(ref as MutableRefObject<HTMLDivElement>);
+    const updateScroll = () => {
+        if (!ref.current || !selected.current) return;
 
-    return <>
+        const elementRect = selected.current.getBoundingClientRect();
+        const containerRect = ref.current.getBoundingClientRect();
+
+        if (
+            elementRect.top >= containerRect.top &&
+            elementRect.bottom <= containerRect.bottom &&
+            elementRect.left >= containerRect.left &&
+            elementRect.right <= containerRect.right
+        ) {
+            setScrollable(false);
+            setAutoScroll(true)
+        } else if (programmScroll.current === 0) setAutoScroll(false);
+    }
+    const scroll = () => selected.current?.scrollIntoView({
+        block: "center",
+        inline: "center",
+        behavior: "smooth"
+    })
+
+    return <TransformWrapper
+        onPanning={updateScroll}
+        limitToBounds={false}
+        maxScale={3}
+        minScale={.1}
+        alignmentAnimation={{
+            disabled: true
+        }}>
         <div className="p-2 border-b border-gray-200 flex items-center gap-2">
             <Boxes/>
             <h1>Blockchain</h1>
             <div className="h-[34px]"></div>
             <div className="grow"></div>
+            <Controls scroll={() => autoScroll && scroll()}/>
             <button
                 className={`flex items-center gap-2 toggle ${!withholdBlocks ? "toggled" : "untoggled"}`}
                 onClick={() => setWithholdBlocks(!withholdBlocks)}
@@ -73,42 +106,45 @@ export const BlockchainView: FC = () => {
             {scrollable && <div
                 style={{writingMode: "vertical-rl"}}
                 className="bg-blue-600 z-[1000] transition cursor-pointer hover:bg-blue-800 -translate-y-1/2 absolute right-5 top-1/2 flex items-center p-2 text-white rounded-4xl"
-                onClick={() => selected.current?.scrollIntoView({
-                    block: "center",
-                    inline: "center",
-                    behavior: "smooth"
-                })}>
+                onClick={() => {
+                    setAutoScroll(true);
+                    scroll();
+                }}>
                 <ArrowRight/>
                 Neue Blöcke
             </div>}
-            <div className="min-h-0 min-w-0 overflow-auto relative" ref={ref} onScroll={() => {
-                if (!ref.current || !selected.current) return;
-
-                const elementRect = selected.current.getBoundingClientRect();
-                const containerRect = ref.current.getBoundingClientRect();
-
-                if (
-                    elementRect.top >= containerRect.top &&
-                    elementRect.bottom <= containerRect.bottom &&
-                    elementRect.left >= containerRect.left &&
-                    elementRect.right <= containerRect.right
-                ) {
-                    setScrollable(false);
-                    setAutoScroll(true)
-                }
-                else if(programmScroll.current === 0) setAutoScroll(false);
-            }}
-                 {...events}>
-                <Xwrapper>
-                    <Inner selected={selected}/>
-                </Xwrapper>
+            <div className="w-full h-full relative" ref={ref} onScroll={updateScroll}
+            >
+                <TransformComponent>
+                    <Xwrapper>
+                        <Inner selected={selected}/>
+                    </Xwrapper>
+                </TransformComponent>
             </div>
         </div>
-    </>
+    </TransformWrapper>
+}
+const Controls: FC<{scroll: () => void}> = ({scroll}) => {
+    const {zoomIn, zoomOut, resetTransform} = useControls();
+    const [zoom, setZoom] = useState(1);
+    useTransformEffect(({state}) => setZoom(state.scale))
+
+    return (
+        <>
+            <button onClick={() => zoomOut()}><MinusCircle/></button>
+            <button onClick={() => {
+                resetTransform()
+                setTimeout(() => scroll(), 200)
+            }}>{Math.round(zoom * 100)}%</button>
+            <button onClick={() => zoomIn()}><PlusCircle/></button>
+            <div className="w-5"></div>
+        </>
+    );
 }
 const Inner: FC<{ selected: RefObject<HTMLDivElement> }> = ({selected}) => {
     const refresh = useXarrow()
     const {chains} = useContext(BlockchainContext)!;
+    useTransformEffect(refresh);
     useEffect(() => {
         refresh()
     }, [chains]);
