@@ -26,7 +26,7 @@ export const RawMessageList: FC = () => {
                 });
                 setScrollable(false);
                 programmScroll.current++;
-                setTimeout(() => programmScroll.current--, 300);
+                setTimeout(() => programmScroll.current--, 400);
             } else setScrollable(true);
             return autoscroll;
         })
@@ -51,6 +51,7 @@ export const RawMessageList: FC = () => {
             className={"grow relative min-h-0" + (messages.length ? "" : " text-center flex items-center justify-center text-gray-400")}>
             {!messages.length && "Keine Nachrichten empfangen"}
             <div ref={list} className="overflow-auto h-full" onScroll={() => {
+                if(programmScroll.current) setAutoScroll(true);
                 if (!list.current || programmScroll.current) return;
                 const e = list.current;
                 setAutoScroll(e.scrollTop === (e.scrollHeight - e.offsetHeight))
@@ -62,12 +63,17 @@ export const RawMessageList: FC = () => {
                     </div>
                 )}
                 <div ref={bottom}/>
-                {scrollable && <div
+                {scrollable && !autoScroll && <div
                     className="bg-blue-600 transition cursor-pointer hover:bg-blue-800 -translate-x-1/2 absolute bottom-5 left-1/2 flex items-center p-2 text-white rounded-4xl"
-                    onClick={() => bottom.current?.scrollIntoView({
-                        block: "end",
-                        behavior: "smooth"
-                    })}>
+                    onClick={() => {
+                        setAutoScroll(true)
+                        programmScroll.current++;
+                        setTimeout(() => programmScroll.current--, 400);
+                        bottom.current?.scrollIntoView({
+                            block: "end",
+                            behavior: "smooth"
+                        })
+                    }}>
                     <ArrowDown/>
                     Neue Nachrichten
                 </div>}
