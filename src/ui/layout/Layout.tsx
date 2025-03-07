@@ -1,4 +1,4 @@
-import {Fragment, MutableRefObject, ReactNode, useEffect, useRef, useState} from "react";
+import {FC, Fragment, MutableRefObject, ReactNode, useEffect, useRef, useState} from "react";
 import {GoldenLayout, LayoutConfig} from "golden-layout";
 import {BlockchainView} from "../components/Blockchain/BlockchainView.tsx";
 import {createPortal} from "react-dom";
@@ -9,19 +9,19 @@ import {MempoolView} from "../components/Mempool/MempoolView.tsx";
 import {AccountList} from "../components/Accounts/AccountList.tsx";
 import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
 import {ArrowLeftRight, Boxes, Network, UserSearch} from "lucide-react";
-import {LayoutContext} from "./LayoutContext.tsx";
+import {LayoutContext, LayoutProps} from "./LayoutContext.tsx";
 import {DragOpener} from "./DragOpener.tsx";
-import {GlAccountView} from "../components/Accounts/AccountView.tsx";
-import {GlMessageView} from "../components/RawMessages/RawMessageView.tsx";
+import {AccountView} from "../components/Accounts/AccountView.tsx";
 import {NewMessage} from "../components/RawMessages/NewMessage.tsx";
+import {RawMessageView} from "../components/RawMessages/RawMessageView.tsx";
 
 
-const knownComponents = {
+const knownComponents: Record<string, FC<LayoutProps<any>>> = {
     Blockchain: BlockchainView,
     Mempool: MempoolView,
     Konten: AccountList,
-    Konto: GlAccountView,
-    Nachricht: GlMessageView,
+    Konto: AccountView,
+    Nachricht: RawMessageView,
     "Übertragung": RawMessageList,
     "Neue Nachricht": NewMessage,
 };
@@ -45,14 +45,13 @@ export const Layout = () => {
             header: {
                 popout: false,
             },
-            settings: {
-                
-            },
+            settings: {},
             root: {
                 type: 'row',
                 content: [{
                     type: 'component',
                     componentType: 'Blockchain',
+                    id: "Blockchain",
                     size: "60%",
                 }, {
                     type: "column",
@@ -68,6 +67,7 @@ export const Layout = () => {
                         {
                             type: 'component',
                             componentType: 'Mempool',
+                            id: "Mempool",
                         },
                         {
                             type: 'component',
@@ -92,7 +92,7 @@ export const Layout = () => {
 
                     setComponents((prev) => ({
                         ...prev,
-                        [id]: <Component state={state} close={() => container.close()}/>,
+                        [id]: <Component props={state} close={() => container.close()}/>,
                     }));
 
                     container.on("destroy", () => {
@@ -131,10 +131,7 @@ export const Layout = () => {
                     componentType: e[1]
                 }}>
                     <button
-                        className="flex gap-2 items-center toggle"
-                        onClick={() => {
-                            glInstance.current?.addComponent(e[1]);
-                        }}>
+                        className="flex gap-2 items-center toggle">
                         {e[0]}
                     </button>
                 </DragOpener>)}

@@ -8,8 +8,9 @@ import {produce, WritableDraft} from "immer";
 import {MakeTransaction} from "./MakeTransaction.tsx";
 import {MiningView} from "./MiningView.tsx";
 import {AccountTransactions} from "./AccountTransactions.tsx";
+import {LayoutProps} from "../../layout/LayoutContext.tsx";
 
-export const AccountView: FC<{ publicKey: string; close: () => void }> = ({publicKey, close}) => {
+export const AccountView: FC<LayoutProps<string>> = ({props: publicKey, close}) => {
     const {send} = useContext(RealtimeContext)!;
     const {setOwnUsers} = useContext(UsersContext)!;
     const user = useUser(publicKey)
@@ -73,8 +74,4 @@ export const AccountView: FC<{ publicKey: string; close: () => void }> = ({publi
             <AccountTransactions publicKey={publicKey}/>
         </Accordeon>
     </>
-}
-
-export const GlAccountView: FC<{ state: string; close: () => {} }> = ({state, close}) => {
-    return <AccountView publicKey={state} close={close}/>
 }

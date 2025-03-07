@@ -27,6 +27,7 @@
     opacity: 1;
 }
 .lm_header {
+    z-index: 35;
     height: 20px;
 }
 .lm_header .lm_tab {

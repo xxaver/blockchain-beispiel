@@ -4,7 +4,7 @@ import {Message, RealtimeContext} from "../../handlers/Realtime/RealtimeContext.
 import {ArrowDown, Eye, Network, Plus} from "lucide-react";
 import {NewMessage} from "./NewMessage.tsx";
 import {RawMessageView} from "./RawMessageView.tsx";
-import {LayoutContext, openItem} from "../../layout/LayoutContext.tsx";
+import {LayoutContext} from "../../layout/LayoutContext.tsx";
 import {DragOpener} from "../../layout/DragOpener.tsx";
 
 export const RawMessageList: FC = () => {
@@ -46,14 +46,11 @@ export const RawMessageList: FC = () => {
             <button className={`toggle ${all ? "toggled" : ""}`} onClick={() => setAll(!all)}>
                 <Eye/>
             </button>
-            <DragOpener config={{
+            <DragOpener containerType="Übertragung" config={{
                 type: "component",
                 componentType: "Neue Nachricht",
             }}>
-                <button onClick={() => {
-                    if(layout) openItem(layout.gl, "Übertragung", "Neue Nachricht", "", "Neue Nachricht") 
-                    else setSelected(selected === true ? null : true)
-                }}>
+                <button onClick={() => !layout && setSelected(selected === true ? null : true)}>
                     <Plus/>
                 </button>
             </DragOpener>
@@ -68,7 +65,7 @@ export const RawMessageList: FC = () => {
                 setAutoScroll(e.scrollTop === (e.scrollHeight - e.offsetHeight))
             }}>
                 {messages.map((message) =>
-                    <DragOpener key={m.indexOf(message)} config={{
+                    <DragOpener containerType="Übertragung" key={m.indexOf(message)} config={{
                         type: "component",
                         componentType: "Nachricht",
                         title: message.event,
@@ -76,11 +73,9 @@ export const RawMessageList: FC = () => {
                     }}>
                         <div>
                             <div className="cursor-pointer item bg-white"
-                                 onClick={() => {
-                                     if (layout) openItem(layout.gl, "Übertragung", "Nachricht", message, message.event)
-                                     else setSelected(selected === message ? null : message)
-                                 }}>
-                                <RawMessageView message={message}/>
+                                 onClick={() => !layout && setSelected(selected === message ? null : message)}>
+                                <RawMessageView close={() => {
+                                }} props={message}/>
                             </div>
                         </div>
                     </DragOpener>
@@ -106,7 +101,7 @@ export const RawMessageList: FC = () => {
         {selected && <div className="grow-0 shrink-0 h-96 border-t border-gray-200">
             {selected === true
                 ? <NewMessage close={() => setSelected(null)}/>
-                : <RawMessageView details message={selected}/>}
+                : <RawMessageView close={() => setSelected(null)} details props={selected}/>}
         </div>}
     </>
 }

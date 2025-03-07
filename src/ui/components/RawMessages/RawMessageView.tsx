@@ -5,8 +5,9 @@ import {KnownEvents} from "./KnownEvents.tsx";
 import {Error} from "./Error.tsx";
 import {knownEvents} from "../../handlers/Realtime/events.ts";
 import {wholeJson} from "../../util.ts";
+import {LayoutProps} from "../../layout/LayoutContext.tsx";
 
-export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({details, message}) => {
+export const RawMessageView: FC<LayoutProps<Message> & {details?: boolean}> = ({details, props: message}) => {
     const {event, payload} = message;
 
     const validator = knownEvents[event];
@@ -14,7 +15,7 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
     const Title = e ? e.title || (() => event) : (() => event);
     const color = e ? (e.color || "") : "text-red-600 bg-red-600/20"
     const icon = e ? e.icon : <ShieldX/> as ReactNode;
-    
+
     const isValid = !validator || validator.safeParse(wholeJson(payload)).success
 
     return details ? <div className="flex flex-col h-full">
@@ -49,7 +50,4 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
             <div className="grow"/>
             <ArrowUpRight size={25} className={message.outgoing ? "" : "opacity-0"}/>
         </div>
-}
-export const GlMessageView: FC<{state: Message}> = ({state}) => {
-    return <RawMessageView message={state} details />
 }
