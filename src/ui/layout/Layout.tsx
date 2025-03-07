@@ -10,12 +10,14 @@ import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
 import {ArrowLeftRight, Boxes, Network, UserSearch} from "lucide-react";
 import {LayoutContext} from "./LayoutContext.tsx";
 import {DragOpener} from "./DragOpener.tsx";
+import {GlAccountView} from "../components/Accounts/AccountView.tsx";
 
 
 const knownComponents = {
     Blockchain: BlockchainView,
     Mempool: MempoolView,
     Konten: AccountList,
+    Konto: GlAccountView,
     "Übertragung": RawMessageList
 };
 const areas: [ReactNode, string][] = [
@@ -45,8 +47,12 @@ export const Layout = () => {
                     componentType: 'Blockchain',
                     size: "60%",
                 }, {
-                    type: 'component',
-                    componentType: 'Konten',
+                    type: "column",
+                    content: [{
+                        type: 'component',
+                        componentType: 'Konten',
+                        id: "Konten",
+                    }]
 
                 }, {
                     type: 'stack',
@@ -127,7 +133,7 @@ export const Layout = () => {
             </div>
             <div className="flex grow min-h-0">
                 <div ref={layoutRef} className="h-full w-full"/>
-                {Object.keys(components).map(e => createPortal(components[e], document.querySelector(`#layout-${e}`)!))}
+                {Object.keys(components).map(e => document.querySelector(`#layout-${e}`) && createPortal(components[e], document.querySelector(`#layout-${e}`)!))}
             </div>
         </div>
     </LayoutContext.Provider>;
