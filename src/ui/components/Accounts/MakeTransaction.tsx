@@ -13,6 +13,7 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
     const to = useRef("")
     const [amount, setAmount] = useState("0");
     const [fee, setFee] = useState("0");
+    const [message, setMessage] = useState("");
     const toOk = !!to;
     const amountOk = !isNaN(parseFloat(amount))
     const feeOk = !isNaN(parseFloat(fee))
@@ -38,8 +39,15 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
             <tr>
                 <td>Gebühr:</td>
                 <td className="py-2">
-                    <input className={"w-full " + (feeOk ? "" : " invalid")} type="number" value={fee}
+                    <input placeholder="Beschleunigt Verarbeitung" className={"w-full " + (feeOk ? "" : " invalid")} type="number" value={fee}
                            onChange={e => setFee(e.target.value)}/>
+                </td>
+            </tr>
+            <tr>
+                <td>Nachricht:</td>
+                <td className="py-2">
+                    <input placeholder="Optional" className="w-full" type="text" value={message}
+                           onChange={e => setMessage(e.target.value)}/>
                 </td>
             </tr>
             </tbody>
@@ -59,7 +67,8 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
                         from: user.publicKey,
                         amount: amountFloat,
                         fee: feeFloat,
-                        id: Date.now()
+                        id: Date.now(),
+                        message
                     } as Transaction), user.publicKey, user.privateKey))
                 }}
             >

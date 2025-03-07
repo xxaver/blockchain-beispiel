@@ -74,7 +74,7 @@ export const RawMessageList: FC = () => {
                         <div>
                             <div className="cursor-pointer item bg-white"
                                  onClick={() => !layout && setSelected(selected === message ? null : message)}>
-                                <RawMessageView close={() => {
+                                <RawMessageView onlyTitle close={() => {
                                 }} props={message}/>
                             </div>
                         </div>
@@ -101,7 +101,7 @@ export const RawMessageList: FC = () => {
         {selected && <div className="grow-0 shrink-0 h-96 border-t border-gray-200">
             {selected === true
                 ? <NewMessage close={() => setSelected(null)}/>
-                : <RawMessageView close={() => setSelected(null)} details props={selected}/>}
+                : <RawMessageView close={() => setSelected(null)} props={selected}/>}
         </div>}
     </>
 }

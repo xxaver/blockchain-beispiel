@@ -7,7 +7,7 @@ import {knownEvents} from "../../handlers/Realtime/events.ts";
 import {wholeJson} from "../../util.ts";
 import {LayoutProps} from "../../layout/LayoutContext.tsx";
 
-export const RawMessageView: FC<LayoutProps<Message> & {details?: boolean}> = ({details, props: message}) => {
+export const RawMessageView: FC<LayoutProps<Message> & {onlyTitle?: boolean}> = ({onlyTitle, props: message}) => {
     const {event, payload} = message;
 
     const validator = knownEvents[event];
@@ -18,10 +18,11 @@ export const RawMessageView: FC<LayoutProps<Message> & {details?: boolean}> = ({
 
     const isValid = !validator || validator.safeParse(wholeJson(payload)).success
 
-    return details ? <div className="flex flex-col h-full">
+    return !onlyTitle ? <div className="flex flex-col h-full">
             <div className={`flex items-center p-2 gap-2 ${color}`}>
                 {icon}
                 <Title message={message.payload}/>
+                <div className="grow"></div>
                 <ArrowUpRight size={25} className={message.outgoing ? "" : "opacity-0"}/>
             </div>
             <div className="p-4">{message.event}</div>

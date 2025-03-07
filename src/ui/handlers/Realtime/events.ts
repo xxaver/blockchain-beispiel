@@ -7,6 +7,7 @@ const transaction = z.object({
         to: z.string(),
         amount: z.number(),
         fee: z.number(),
+        message: z.string()
     }),
     signature: z.string(),
     publicKey: z.string(),

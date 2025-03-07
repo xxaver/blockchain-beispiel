@@ -42,5 +42,9 @@ export const TransactionDetails: FC<LayoutProps<Transaction>> = ({props: transac
             <div className="grow">Nonce:</div>
             {transaction.id}
         </div>
+        <div className="flex items-center p-2">
+            <div className="grow">Nachricht:</div>
+            {transaction.message}
+        </div>
     </div>
 }
