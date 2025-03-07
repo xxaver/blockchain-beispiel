@@ -1,4 +1,4 @@
-import {FC, useContext} from "react";
+import {FC, useContext, useEffect} from "react";
 import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 import {AccountTitle} from "./AccountTitle.tsx";
 import {ArrowLeftRight, HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
@@ -9,7 +9,7 @@ import {MakeTransaction} from "./MakeTransaction.tsx";
 import {MiningView} from "./MiningView.tsx";
 import {AccountTransactions} from "./AccountTransactions.tsx";
 
-export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
+export const AccountView: FC<{ publicKey: string; close: () => void }> = ({publicKey, close}) => {
     const {send} = useContext(RealtimeContext)!;
     const {setOwnUsers} = useContext(UsersContext)!;
     const user = useUser(publicKey)
@@ -24,6 +24,10 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
             })
         )
     }
+
+    useEffect(() => {
+        if(!user) close();
+    }, [user]);
 
     if (!user) return null;
     const own = "privateKey" in user
@@ -71,6 +75,6 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
     </>
 }
 
-export const GlAccountView: FC<{ state: string }> = ({state}) => {
-    return <AccountView publicKey={state}/>
+export const GlAccountView: FC<{ state: string; close: () => {} }> = ({state, close}) => {
+    return <AccountView publicKey={state} close={close}/>
 }

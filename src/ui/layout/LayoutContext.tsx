@@ -1,12 +1,13 @@
 import {createContext} from "react";
-import {ComponentItemConfig, ContentItem, GoldenLayout, ResolvedItemConfig, RowOrColumn, Stack} from "golden-layout";
+import {ComponentItemConfig, GoldenLayout, JsonValue, ResolvedItemConfig, RowOrColumn, Stack} from "golden-layout";
 
 export const LayoutContext = createContext<null | {
     gl: GoldenLayout
 }>(null)
 
-export const openItem = (gl: GoldenLayout, containerType: string, type: string, state: string, title: string) => {
-    const existing = gl.findFirstComponentItemById(`${type}-${state}`)
+export const openItem = (gl: GoldenLayout, containerType: string, type: string, state: JsonValue, title: string) => {
+    const id = state ? `${type}-${JSON.stringify(state)}` : type
+    const existing = gl.findFirstComponentItemById(id)
     if (existing) {
         if (existing.parent?.isStack) {
             (existing.parent as Stack).setActiveComponentItem(existing, true)
@@ -17,7 +18,7 @@ export const openItem = (gl: GoldenLayout, containerType: string, type: string, 
         type: "component",
         componentType: type,
         componentState: state,
-        id: `${type}-${state}`,
+        id,
         content: [],
         title
     };
@@ -38,5 +39,5 @@ export const openItem = (gl: GoldenLayout, containerType: string, type: string, 
         }
 
     }
-    //else gl.addItem(config)
+    else gl.addItem(config)
 }

@@ -53,7 +53,7 @@ export const AccountList: FC = () => {
             }}>
                 <div
                     onClick={() => openUser(user)}
-                    className="cursor-pointer p-2 item bg-white flex items-center gap-2"
+                    className="select-none cursor-pointer p-2 item bg-white flex items-center gap-2"
                     key={user.publicKey}>
                     <AccountTitle publicKey={user.publicKey}/>
                 </div>

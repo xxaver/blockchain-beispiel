@@ -4,8 +4,11 @@ import {Message, RealtimeContext} from "../../handlers/Realtime/RealtimeContext.
 import {ArrowDown, Eye, Network, Plus} from "lucide-react";
 import {NewMessage} from "./NewMessage.tsx";
 import {RawMessageView} from "./RawMessageView.tsx";
+import {LayoutContext, openItem} from "../../layout/LayoutContext.tsx";
+import {DragOpener} from "../../layout/DragOpener.tsx";
 
 export const RawMessageList: FC = () => {
+    const layout = useContext(LayoutContext);
     const [selected, setSelected] = useState<null | true | Message>(null)
     const [all, setAll] = useState(false)
     const [autoScroll, setAutoScroll] = useState(true)
@@ -14,8 +17,8 @@ export const RawMessageList: FC = () => {
     const list = useRef<HTMLDivElement>(null);
     const [scrollable, setScrollable] = useState(false);
     const programmScroll = useRef(0);
-    
-    const messages = all ? m : m.filter(e => !(e.payload as {silent: boolean}).silent);
+
+    const messages = all ? m : m.filter(e => !(e.payload as { silent: boolean }).silent);
 
     useEffect(() => {
         setAutoScroll(autoscroll => {
@@ -43,24 +46,44 @@ export const RawMessageList: FC = () => {
             <button className={`toggle ${all ? "toggled" : ""}`} onClick={() => setAll(!all)}>
                 <Eye/>
             </button>
-            <button onClick={() => setSelected(selected === true ? null : true)}>
-                <Plus/>
-            </button>
+            <DragOpener config={{
+                type: "component",
+                componentType: "Neue Nachricht",
+            }}>
+                <button onClick={() => {
+                    if(layout) openItem(layout.gl, "Übertragung", "Neue Nachricht", "", "Neue Nachricht") 
+                    else setSelected(selected === true ? null : true)
+                }}>
+                    <Plus/>
+                </button>
+            </DragOpener>
         </div>
         <div
             className={"grow relative min-h-0" + (messages.length ? "" : " text-center flex items-center justify-center text-gray-400")}>
             {!messages.length && "Keine Nachrichten empfangen"}
             <div ref={list} className="overflow-auto h-full" onScroll={() => {
-                if(programmScroll.current) setAutoScroll(true);
+                if (programmScroll.current) setAutoScroll(true);
                 if (!list.current || programmScroll.current) return;
                 const e = list.current;
                 setAutoScroll(e.scrollTop === (e.scrollHeight - e.offsetHeight))
             }}>
-                {messages.map((message, i) =>
-                    <div key={i} className="cursor-pointer item bg-white"
-                         onClick={() => setSelected(selected === message ? null : message)}>
-                        <RawMessageView message={message}/>
-                    </div>
+                {messages.map((message) =>
+                    <DragOpener key={m.indexOf(message)} config={{
+                        type: "component",
+                        componentType: "Nachricht",
+                        title: message.event,
+                        componentState: message
+                    }}>
+                        <div>
+                            <div className="cursor-pointer item bg-white"
+                                 onClick={() => {
+                                     if (layout) openItem(layout.gl, "Übertragung", "Nachricht", message, message.event)
+                                     else setSelected(selected === message ? null : message)
+                                 }}>
+                                <RawMessageView message={message}/>
+                            </div>
+                        </div>
+                    </DragOpener>
                 )}
                 <div ref={bottom}/>
                 {scrollable && !autoScroll && <div

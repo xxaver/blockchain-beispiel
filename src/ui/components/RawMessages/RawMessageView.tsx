@@ -50,3 +50,6 @@ export const RawMessageView: FC<{ message: Message; details?: boolean }> = ({det
             <ArrowUpRight size={25} className={message.outgoing ? "" : "opacity-0"}/>
         </div>
 }
+export const GlMessageView: FC<{state: Message}> = ({state}) => {
+    return <RawMessageView message={state} details />
+}

@@ -11,6 +11,8 @@ import {ArrowLeftRight, Boxes, Network, UserSearch} from "lucide-react";
 import {LayoutContext} from "./LayoutContext.tsx";
 import {DragOpener} from "./DragOpener.tsx";
 import {GlAccountView} from "../components/Accounts/AccountView.tsx";
+import {GlMessageView} from "../components/RawMessages/RawMessageView.tsx";
+import {NewMessage} from "../components/RawMessages/NewMessage.tsx";
 
 
 const knownComponents = {
@@ -18,7 +20,9 @@ const knownComponents = {
     Mempool: MempoolView,
     Konten: AccountList,
     Konto: GlAccountView,
-    "Übertragung": RawMessageList
+    Nachricht: GlMessageView,
+    "Übertragung": RawMessageList,
+    "Neue Nachricht": NewMessage,
 };
 const areas: [ReactNode, string][] = [
     [<><Boxes/> Blockchain</>, "Blockchain"],
@@ -60,12 +64,12 @@ export const Layout = () => {
                         {
                             type: 'component',
                             componentType: 'Mempool',
-
                         },
                         {
                             type: 'component',
                             componentType: 'Übertragung',
-                        }
+                            id: "Übertragung",
+                        },
                     ]
                 }]
             }
@@ -84,7 +88,7 @@ export const Layout = () => {
 
                     setComponents((prev) => ({
                         ...prev,
-                        [id]: <Component state={state}/>,
+                        [id]: <Component state={state} close={() => container.close()}/>,
                     }));
 
                     container.on("destroy", () => {
