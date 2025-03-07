@@ -6,12 +6,19 @@ import {generateKeyPair} from "../../../blockchain/crypto.ts";
 import {AccountTitle} from "./AccountTitle.tsx";
 import {AccountView} from "./AccountView.tsx";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
+import {LayoutContext} from "../../layout/LayoutContext.tsx";
 
 export const AccountList: FC = () => {
     const {send} = useContext(RealtimeContext)!;
     const {knownUsers, ownUsers, setOwnUsers} = useContext(UsersContext)!;
     const otherUsers = knownUsers.filter(user => !ownUsers.some(own => own.publicKey === user.publicKey));
     const [selected, setSelected] = useState<null | string>(null)
+    const layout = useContext(LayoutContext);
+    
+    const openUser = (publicKey: string) => {
+        if(layout) return;
+        setSelected(selected === publicKey ? null : publicKey)
+    }
 
     return <>
         <div className="p-2 border-b border-gray-200 flex items-center gap-2">
@@ -37,7 +44,7 @@ export const AccountList: FC = () => {
             <h2 className="p-2 flex items-center gap-2"><UserPen/> Deine Konten</h2>
             {!ownUsers.length && <div className="p-2 text-center py-10 text-gray-400">Noch kein Konto angelegt!</div>}
             {ownUsers.map(user => <div
-                onClick={() => setSelected(selected === user.publicKey ? null : user.publicKey)}
+                onClick={() => openUser(user.publicKey)}
                 className="cursor-pointer p-2 item bg-white flex items-center gap-2"
                 key={user.publicKey}>
                 <AccountTitle publicKey={user.publicKey}/>
@@ -46,7 +53,7 @@ export const AccountList: FC = () => {
             {!otherUsers.length && <div className="p-2 text-center py-10 text-gray-400">Keine anderen Benutzer</div>}
             {otherUsers.map(user => <div
                 className="cursor-pointer p-2 item bg-white flex items-center gap-2"
-                onClick={() => setSelected(selected === user.publicKey ? null : user.publicKey)}
+                onClick={() => openUser(user.publicKey)}
                 key={user.publicKey}>
                 <AccountTitle publicKey={user.publicKey}/>
             </div>)}

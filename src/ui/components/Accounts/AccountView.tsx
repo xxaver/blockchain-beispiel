@@ -63,10 +63,14 @@ export const AccountView: FC<{ publicKey: string }> = ({publicKey}) => {
             <MakeTransaction user={user}/>
         </Accordeon>}
         <Accordeon noPadding open title={<><Pickaxe/> Mining</>}>
-            <MiningView publicKey={publicKey} />
+            <MiningView publicKey={publicKey}/>
         </Accordeon>
         <Accordeon noPadding title={<><ArrowLeftRight/> Transaktionen</>}>
-            <AccountTransactions publicKey={publicKey} />
+            <AccountTransactions publicKey={publicKey}/>
         </Accordeon>
     </>
+}
+
+export const GlAccountView: FC<{ state: string }> = ({state}) => {
+    return <AccountView publicKey={state}/>
 }

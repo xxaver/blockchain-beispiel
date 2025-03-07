@@ -1,5 +1,5 @@
 import {FC, Fragment, MutableRefObject, ReactNode, useContext, useEffect, useRef, useState} from "react";
-import {GoldenLayout, ItemType, LayoutConfig} from "golden-layout";
+import {GoldenLayout, LayoutConfig} from "golden-layout";
 import {BlockchainView} from "../components/Blockchain/BlockchainView.tsx";
 import {createPortal} from "react-dom";
 import "golden-layout/dist/css/goldenlayout-base.css";
@@ -9,7 +9,8 @@ import {AccountList} from "../components/Accounts/AccountList.tsx";
 import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
 import {ArrowLeftRight, Boxes, Network, UserSearch} from "lucide-react";
 import {LayoutContext} from "./LayoutContext.tsx";
-import component = ItemType.component;
+import {DragOpener} from "./DragOpener.tsx";
+
 
 const knownComponents = {
     Blockchain: BlockchainView,
@@ -23,28 +24,6 @@ const areas: [ReactNode, string][] = [
     [<><UserSearch/> Konten</>, "Konten"],
     [<><Network/> Übertragung</>, "Übertragung"]]
 
-const DragButton: FC<{ item: [ReactNode, string] }> = ({item}) => {
-    const {gl} = useContext(LayoutContext)!
-    const button = useRef<HTMLButtonElement>(null);
-    
-    useEffect(() => {
-        if(!gl || !button.current) return ;
-        gl.newDragSource(button.current!, () => ({
-            type: "component",
-            componentType: item[1]
-        }))
-    }, [gl, button]);
-
-    return <button
-        ref={button}
-        className="flex gap-2 items-center toggle"
-        onClick={() => {
-            gl.addComponent(item[1]);
-        }}>
-        {item[0]}
-    </button>
-}
-
 export const Layout = () => {
     const layoutRef = useRef<HTMLDivElement>(null);
     const glInstance = useRef<GoldenLayout>(null) as MutableRefObject<GoldenLayout>;
@@ -56,6 +35,9 @@ export const Layout = () => {
     useEffect(() => {
         if (!layoutRef.current) return;
         const config: LayoutConfig = {
+            header: {
+                popout: false,
+            },
             root: {
                 type: 'row',
                 content: [{
@@ -130,7 +112,18 @@ export const Layout = () => {
             <div className="grow-0 flex items-center shrink-0 p-2 border-b border-gray-200 gap-2">
                 <h1 className="text-2xl">Blockchain-Beispiel</h1>
                 <div className="grow"></div>
-                {areas.map((e, i) => <DragButton item={e} key={i}/>)}
+                {areas.map((e, i) => <DragOpener key={i} config={{
+                    type: "component",
+                    componentType: e[1]
+                }}>
+                    <button
+                        className="flex gap-2 items-center toggle"
+                        onClick={() => {
+                            glInstance.current?.addComponent(e[1]);
+                        }}>
+                        {e[0]}
+                    </button>
+                </DragOpener>)}
             </div>
             <div className="flex grow min-h-0">
                 <div ref={layoutRef} className="h-full w-full"/>
