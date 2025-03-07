@@ -115,7 +115,7 @@ export const BlockchainView: FC = () => {
         >
             {scrollable && <div
                 style={{writingMode: "vertical-rl"}}
-                className="bg-blue-600 z-[1000] transition cursor-pointer hover:bg-blue-800 -translate-y-1/2 absolute right-5 top-1/2 flex items-center p-2 text-white rounded-4xl"
+                className="bg-blue-600 z-[31] transition cursor-pointer hover:bg-blue-800 -translate-y-1/2 absolute right-5 top-1/2 flex items-center p-2 text-white rounded-4xl"
                 onClick={() => {
                     setAutoScroll(true);
                     scroll();

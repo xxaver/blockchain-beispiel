@@ -5,7 +5,7 @@ import {AccountList} from "../components/Accounts/AccountList.tsx";
 import {ArrowLeftRight, Boxes, Network, UserSearch} from "lucide-react";
 import {MempoolView} from "../components/Mempool/MempoolView.tsx";
 
-const areas = [
+export const areas = [
     [<><Boxes/> Blockchain</>, <BlockchainView/>],
     [<><ArrowLeftRight/> Mempool</>, <MempoolView/>],
     [<><UserSearch/> Konten</>, <AccountList/>],

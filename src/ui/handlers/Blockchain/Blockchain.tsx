@@ -17,7 +17,7 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
 
     const [blocks, setBlocks] = useState([genesisBlock])
     const [selectedBlock, setSelectedBlock] = useState<null | string>(null);
-    const [strict, setStrict] = useState(false);
+    const [strict, setStrict] = useState(true);
     const [withholdBlocks, setWithholdBlocks] = useState(false)
     const [withheldBlocks, setWithheldBlocks] = useState<ComputedBlock[]>([])
     
