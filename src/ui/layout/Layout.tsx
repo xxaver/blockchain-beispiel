@@ -1,9 +1,10 @@
-import {FC, Fragment, MutableRefObject, ReactNode, useContext, useEffect, useRef, useState} from "react";
+import {Fragment, MutableRefObject, ReactNode, useEffect, useRef, useState} from "react";
 import {GoldenLayout, LayoutConfig} from "golden-layout";
 import {BlockchainView} from "../components/Blockchain/BlockchainView.tsx";
 import {createPortal} from "react-dom";
 import "golden-layout/dist/css/goldenlayout-base.css";
 import "golden-layout/dist/css/themes/goldenlayout-light-theme.css";
+import "./goldenlayout.css";
 import {MempoolView} from "../components/Mempool/MempoolView.tsx";
 import {AccountList} from "../components/Accounts/AccountList.tsx";
 import {RawMessageList} from "../components/RawMessages/RawMessageList.tsx";
@@ -43,6 +44,9 @@ export const Layout = () => {
         const config: LayoutConfig = {
             header: {
                 popout: false,
+            },
+            settings: {
+                
             },
             root: {
                 type: 'row',
