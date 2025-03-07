@@ -90,3 +90,6 @@ textarea {
 .lm_splitter {
   z-index: 35 !important;
 }
+body, html {
+  overflow: hidden;
+}

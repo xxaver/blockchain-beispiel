@@ -14,6 +14,7 @@ import {DragOpener} from "./DragOpener.tsx";
 import {AccountView} from "../components/Accounts/AccountView.tsx";
 import {NewMessage} from "../components/RawMessages/NewMessage.tsx";
 import {RawMessageView} from "../components/RawMessages/RawMessageView.tsx";
+import {TransactionDetails} from "../components/Transactions/TransactionDetails.tsx";
 
 
 const knownComponents: Record<string, FC<LayoutProps<any>>> = {
@@ -22,6 +23,7 @@ const knownComponents: Record<string, FC<LayoutProps<any>>> = {
     Konten: AccountList,
     Konto: AccountView,
     Nachricht: RawMessageView,
+    Transaktion: TransactionDetails,
     "Übertragung": RawMessageList,
     "Neue Nachricht": NewMessage,
 };
@@ -45,7 +47,6 @@ export const Layout = () => {
             header: {
                 popout: false,
             },
-            settings: {},
             root: {
                 type: 'row',
                 content: [{
@@ -87,7 +88,7 @@ export const Layout = () => {
                 setId(id => {
                     const div = document.createElement("div");
                     div.id = `layout-${id}`;
-                    div.className = "bg-white h-full w-full flex flex-col" + (key !== "Blockchain" ? " z-[30] absolute" : "");
+                    div.className = "bg-white h-full w-full flex flex-col min-h-0 overflow-auto " + (key !== "Blockchain" ? " z-[30] absolute" : "");
                     container.element.appendChild(div);
 
                     setComponents((prev) => ({

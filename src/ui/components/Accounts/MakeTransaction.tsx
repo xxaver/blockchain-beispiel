@@ -29,7 +29,7 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
                 </td>
             </tr>
             <tr>
-                <td>Anzahl:</td>
+                <td>Betrag:</td>
                 <td className="py-2">
                     <input className={"w-full " + (amountOk ? "" : " invalid")} type="number" value={amount}
                            onChange={e => setAmount(e.target.value)}/>

@@ -1,4 +1,4 @@
-.lm_goldenlayout {
+.lm_goldenlayout, .lm_tab, .lm_header, .lm_drag_handle {
     background: #f4f4f4;
 }
 .lm_content {

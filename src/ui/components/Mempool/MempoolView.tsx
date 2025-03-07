@@ -14,6 +14,7 @@ import {TransactionView} from "./TransactionView.tsx";
 import {Accordeon} from "../Accordeon.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 import {maxTransactions} from "../../config.ts";
+import {TransactionOpener} from "../Transactions/TransactionDetails.tsx";
 
 export const MempoolView: FC = () => {
     const {valid, notSigned, double, overspent, invalid, auto, setAuto, chosen} = useContext(MempoolContext)!;
@@ -56,21 +57,26 @@ export const MempoolView: FC = () => {
             {categories.map((category, key) => <div className={key ? "border-t border-gray-200" : ""} key={key}>
                 <Accordeon noPadding open={key < categories.length - 1} title={<>
                     {category.title}
-                    {key === 0 && category.data.length > maxTransactions && <div className="bg-red-600 text-white rounded-xl py-1 px-2">max {maxTransactions}</div>}
+                    {key === 0 && category.data.length > maxTransactions &&
+                        <div className="bg-red-600 text-white rounded-xl py-1 px-2">max {maxTransactions}</div>}
                     <div className="grow"></div>
                     {key === 0 && <>
-                        <Pickaxe className="text-yellow-600" />
+                        <Pickaxe className="text-yellow-600"/>
                         <CurrentCoins coins={category.data.reduce((a, b) => a + b.transaction.fee, 0)}/>
                     </>}
                     <div className="circle">{category.data.length}</div>
                 </>}>
                     {!category.data.length &&
                         <div className="text-center my-10 text-gray-400">Keine Transaktionen</div>}
-                    {category.data.map((transaction) => <div
-                        className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
-                        key={JSON.stringify(transaction)}>
-                        <TransactionView withValid={key === 0} transaction={transaction}/>
-                    </div>)}
+                    {category.data.map((transaction) => <TransactionOpener
+                        key={JSON.stringify(transaction)}
+                        transaction={transaction.transaction}>
+                        <div
+                            className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
+                        >
+                            <TransactionView withValid={key === 0} transaction={transaction}/>
+                        </div>
+                    </TransactionOpener>)}
                 </Accordeon></div>)}
         </div>
     </>
