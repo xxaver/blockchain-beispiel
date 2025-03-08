@@ -8,7 +8,8 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const {send} = useContext(RealtimeContext)!
     const [knownUsers, setKnownUsers] = useState<KnownUser[]>([]);
     const [ownUsers, setOwnUsers] = useState<OwnUser[]>([]);
-    const {url} = useParams()!
+    const {url, channel} = useParams()!;
+    const storageKey = `users:${url}:${channel}`
 
     const sendUsers = (users: OwnUser[], silent = false) => users.forEach(user => send("join", removePrivateKey(user)), silent);
 
@@ -22,14 +23,14 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     useEffect(() => {
         let users = [];
         try {
-            users = JSON.parse(localStorage.getItem(`users:${url}`) as string);
+            users = JSON.parse((localStorage.getItem(storageKey) || []));
             sendUsers(users);
         } catch { /* empty */
         }
         setOwnUsers(users as OwnUser[]);
     }, [url]);
     useEffect(() => {
-        localStorage.setItem(`users:${url}`, JSON.stringify(ownUsers))
+        localStorage.setItem(storageKey, JSON.stringify(ownUsers))
     }, [ownUsers]);
     
     return <UsersContext.Provider value={{

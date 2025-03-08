@@ -5,10 +5,11 @@ import {Handler, Message, RealtimeContext} from "./RealtimeContext.ts";
 export const Realtime: FC<PropsWithChildren<{
     baseURL: string;
     anonKey: string;
-}>> = ({children, baseURL, anonKey}) => {
+    channelName: string
+}>> = ({children, baseURL, anonKey, channelName}) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const client = useMemo(() => createClient(baseURL, anonKey), [baseURL, anonKey]);
-    const channel = useMemo(() => client.channel("blockchain"), [client]);
+    const channel = useMemo(() => client.channel(channelName), [client]);
     const subscriptions = useRef<{
         event: string;
         handler: Handler<never>

@@ -3,7 +3,7 @@ import {Create} from "./Create.tsx";
 import {Navigate} from "react-router";
 
 export const Start: FC = () => {
-    const [defaultConfig, setDefaultConfig] = useState<{ key: string, url: string } | null>(null);
+    const [defaultConfig, setDefaultConfig] = useState<{ key: string, url: string; channel: string } | null>(null);
     useEffect(() => {
         try {
             const parsed = JSON.parse(localStorage.getItem("default") || "");
@@ -13,6 +13,6 @@ export const Start: FC = () => {
     }, []);
 
     return defaultConfig ?
-        <Navigate replace to={`/${encodeURIComponent(defaultConfig.url)}/${encodeURIComponent(defaultConfig.key)}`}/> :
+        <Navigate replace to={`/${encodeURIComponent(defaultConfig.channel)}/${encodeURIComponent(defaultConfig.url)}/${encodeURIComponent(defaultConfig.key)}`}/> :
         <Create/>
 }
