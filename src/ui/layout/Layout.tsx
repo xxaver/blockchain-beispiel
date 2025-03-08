@@ -1,9 +1,12 @@
-import {FC, Fragment, MutableRefObject, ReactNode, useEffect, useRef, useState} from "react";
+import {FC, MutableRefObject, ReactNode, useEffect, useRef, useState} from "react";
 import {GoldenLayout, LayoutConfig} from "golden-layout";
 import {BlockchainView} from "../components/Blockchain/BlockchainView.tsx";
 import {createPortal} from "react-dom";
+// @ts-expect-error jaja
 import "golden-layout/dist/css/goldenlayout-base.css";
+// @ts-expect-error jaja
 import "golden-layout/dist/css/themes/goldenlayout-light-theme.css";
+// @ts-expect-error jaja
 import "./goldenlayout.css";
 import {MempoolView} from "../components/Mempool/MempoolView.tsx";
 import {AccountList} from "../components/Accounts/AccountList.tsx";
@@ -139,7 +142,11 @@ export const Layout = () => {
             </div>
             <div className="flex grow min-h-0">
                 <div ref={layoutRef} className="h-full w-full"/>
-                {Object.keys(components).map(e => document.querySelector(`#layout-${e}`) && createPortal(components[e], document.querySelector(`#layout-${e}`)!))}
+                {Object.keys(components).map(
+                    e => document.querySelector(`#layout-${e}`) && createPortal(
+                        components[e as unknown as keyof typeof components],
+                        document.querySelector(`#layout-${e}`)!)
+                )}
             </div>
         </div>
     </LayoutContext.Provider>;

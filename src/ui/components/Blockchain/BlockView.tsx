@@ -4,12 +4,11 @@ import {Accordeon} from "../Accordeon.tsx";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
 import {AlertCircle, MousePointerClick} from "lucide-react";
 import {AccountTitle} from "../Accounts/AccountTitle.tsx";
-import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {Transaction} from "../../../blockchain/Transaction.ts";
 import {ComputedBlock} from "../../../blockchain/BlockChain.ts";
 import {difficulty} from "../../config.ts";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
-import {TransactionOpener} from "../Transactions/TransactionDetails.tsx";
+import {TransactionListItem} from "../Transactions/TransactionDetails.tsx";
 
 export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivElement> }> = ({block, selected}) => {
     const {setSelectedBlock, currentChain, withheldBlocks} = useContext(BlockchainContext)!;
@@ -47,12 +46,8 @@ export const BlockView: FC<{ block: ComputedBlock; selected: RefObject<HTMLDivEl
                     <span className="text-red-600">Ungültig</span>
                 </>}
             </>}>
-                {block.transactions.map((transaction: Transaction, i: number) => <TransactionOpener
-                    transaction={transaction} key={i}>
-                    <div className="flex items-center gap-1 py-1">
-                        <TransactionTitle withFee transaction={transaction}/>
-                    </div>
-                </TransactionOpener>)}
+                {block.transactions.map((transaction: Transaction, i: number) => <TransactionListItem
+                    transaction={transaction} key={i}/>)}
                 {!block.transactions.length && <div className="text-center text-gray-400 py-5">
                     Keine Transaktionen
                 </div>}

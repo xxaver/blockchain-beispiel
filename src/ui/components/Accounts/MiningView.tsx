@@ -4,9 +4,8 @@ import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/U
 import {produce, WritableDraft} from "immer";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {parseJSON} from "../../util.ts";
-import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {Signed} from "../../../blockchain/Signed.ts";
-import {TransactionOpener} from "../Transactions/TransactionDetails.tsx";
+import {TransactionListItem} from "../Transactions/TransactionDetails.tsx";
 
 export const MiningView: FC<{ publicKey: string }> = ({publicKey}) => {
     const {send} = useContext(RealtimeContext)!;
@@ -70,12 +69,8 @@ export const MiningView: FC<{ publicKey: string }> = ({publicKey}) => {
         {own && <div>
             <div className="mt-1 p-3">Enthaltene Transaktionen</div>
             {transactions
-                .map((e: Signed, i: number) => <TransactionOpener transaction={parseJSON(e.data)}>
-                    <div
-                        className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600">
-                        <TransactionTitle key={i} withFee transaction={parseJSON(e.data)}/>
-                    </div>
-                </TransactionOpener>)}
+                .map((e: Signed, i: number) => <TransactionListItem key={`${i}${e.data}`}
+                                                                    transaction={parseJSON(e.data)}/>)}
             {!transactions.length && <div className="text-center py-5 text-gray-400">
                 Keine Transaktionen
             </div>}

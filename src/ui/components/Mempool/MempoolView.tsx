@@ -10,11 +10,10 @@ import {
     Signature
 } from "lucide-react";
 import {MempoolContext} from "../../handlers/Mempool/MempoolContext.ts";
-import {TransactionView} from "./TransactionView.tsx";
 import {Accordeon} from "../Accordeon.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 import {maxTransactions} from "../../config.ts";
-import {TransactionOpener} from "../Transactions/TransactionDetails.tsx";
+import {TransactionListItem} from "../Transactions/TransactionDetails.tsx";
 
 export const MempoolView: FC = () => {
     const {valid, notSigned, double, overspent, invalid, auto, setAuto, chosen} = useContext(MempoolContext)!;
@@ -68,15 +67,9 @@ export const MempoolView: FC = () => {
                 </>}>
                     {!category.data.length &&
                         <div className="text-center my-10 text-gray-400">Keine Transaktionen</div>}
-                    {category.data.map((transaction) => <TransactionOpener
+                    {category.data.map((transaction) => <TransactionListItem
                         key={JSON.stringify(transaction)}
-                        transaction={transaction.transaction}>
-                        <div
-                            className="bg-yellow-600/20 flex items-center gap-2 p-2 text-yellow-600"
-                        >
-                            <TransactionView withValid={key === 0} transaction={transaction}/>
-                        </div>
-                    </TransactionOpener>)}
+                        transaction={transaction.transaction}/>)}
                 </Accordeon></div>)}
         </div>
     </>

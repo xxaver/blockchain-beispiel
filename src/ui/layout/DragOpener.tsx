@@ -11,15 +11,17 @@ export const DragOpener: FC<PropsWithChildren<{ config: ComponentItemConfig; con
         const ref = useRef<HTMLElement>(null)
         const configured = useRef(false);
         useEffect(() => {
-            if (configured.current || !layout || !layout.gl || !ref.current) return;
+            if (!layout || !layout.gl || !ref.current) return;
             const {gl} = layout;
+            if (!configured.current) {
+                gl.newDragSource(ref.current, () => config);
+                ref.current.querySelectorAll("*").forEach((child) => {
+                    gl.newDragSource(child as HTMLElement, () => config);
+                });
+            }
             configured.current = true;
-            gl.newDragSource(ref.current, () => config);
-            ref.current.querySelectorAll("*").forEach((child) => {
-                gl.newDragSource(child as HTMLElement, () => config);
-            });
 
-            ref.current.addEventListener("click", () => {
+            const listener = () => {
                 const existing = gl.findFirstComponentItemById(id)
                 if (existing) {
                     if (existing.parent?.isStack) {
@@ -48,11 +50,15 @@ export const DragOpener: FC<PropsWithChildren<{ config: ComponentItemConfig; con
                     }
                 }
                 gl.addItem(config)
-            })
+            }
+            const el = ref.current
+            el.addEventListener("click", listener)
+            return () => el.removeEventListener("click", listener)
         }, [layout]);
 
+
         return Children.map(children, (child) =>
-            isValidElement(child)
+            isValidElement(child) // @ts-expect-error jaja
                 ? cloneElement(child, {ref})
                 : child
         )

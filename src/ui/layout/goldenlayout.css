@@ -1,9 +1,12 @@
-.lm_goldenlayout, .lm_tab, .lm_header, .lm_drag_handle {
+.lm_goldenlayout, .lm_tab, .lm_header {
     background: #f4f4f4;
 }
 .lm_content {
     background: #e1e1e1;
     border: 1px solid #cccccc;
+}
+.lm_dragProxy {
+    z-index: 36;
 }
 .lm_dragProxy .lm_content {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);

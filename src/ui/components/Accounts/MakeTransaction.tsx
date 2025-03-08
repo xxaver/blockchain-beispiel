@@ -14,6 +14,7 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
     const [amount, setAmount] = useState("0");
     const [fee, setFee] = useState("0");
     const [message, setMessage] = useState("");
+    const [nonce, setNonce] = useState("");
     const toOk = !!to;
     const amountOk = !isNaN(parseFloat(amount))
     const feeOk = !isNaN(parseFloat(fee))
@@ -50,6 +51,13 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
                            onChange={e => setMessage(e.target.value)}/>
                 </td>
             </tr>
+            <tr>
+                <td>Nonce:</td>
+                <td className="py-2">
+                    <input placeholder="Automatisch" className="w-full" type="text" value={nonce}
+                           onChange={e => setNonce(e.target.value)}/>
+                </td>
+            </tr>
             </tbody>
         </table>
         <div className="flex">
@@ -67,7 +75,7 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
                         from: user.publicKey,
                         amount: amountFloat,
                         fee: feeFloat,
-                        id: Date.now(),
+                        id: nonce || Date.now(),
                         message
                     } as Transaction), user.publicKey, user.privateKey))
                 }}

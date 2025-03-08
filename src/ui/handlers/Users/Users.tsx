@@ -10,7 +10,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     const [ownUsers, setOwnUsers] = useState<OwnUser[]>([]);
     const {url} = useParams()!
 
-    const sendUsers = (users: OwnUser[], silent=false) => users.forEach(user => send("join", removePrivateKey(user)), silent);
+    const sendUsers = (users: OwnUser[], silent = false) => users.forEach(user => send("join", removePrivateKey(user)), silent);
 
     useEvent("join", (data: KnownUser) => {
         setKnownUsers(users => {
@@ -31,8 +31,12 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     useEffect(() => {
         localStorage.setItem(`users:${url}`, JSON.stringify(ownUsers))
     }, [ownUsers]);
-
-    return <UsersContext.Provider value={{knownUsers: [...ownUsers, ...knownUsers], ownUsers, setOwnUsers}}>
+    
+    return <UsersContext.Provider value={{
+        knownUsers: [...ownUsers, ...knownUsers.filter(e => !ownUsers.some(o => o.publicKey === e.publicKey))],
+        ownUsers,
+        setOwnUsers
+    }}>
         {ownUsers.map(user => <MiningHandler user={user} key={user.publicKey}/>)}
         {children}
     </UsersContext.Provider>
