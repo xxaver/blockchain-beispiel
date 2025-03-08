@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={basePath}>
         <Routes>
             <Route index element={<Start/>}/>
-            <Route path=":url/:key" element={<Main/>}/>
+            <Route path=":channel/:url/:key" element={<Main/>}/>
             <Route path="create" element={<Create/>}/>
         </Routes>
     </BrowserRouter>,
