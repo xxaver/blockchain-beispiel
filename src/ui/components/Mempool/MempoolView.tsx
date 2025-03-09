@@ -71,7 +71,7 @@ export const MempoolView: FC = () => {
                     {category.data.map((transaction) => <TransactionListItem
                         key={JSON.stringify(transaction)}
                         transaction={transaction.transaction}>
-                        <MempoolTransactionView withValid={key === 0} transaction={transaction} />
+                        <MempoolTransactionView withValid={key === 0} transaction={transaction}/>
                     </TransactionListItem>)}
                 </Accordeon></div>)}
         </div>

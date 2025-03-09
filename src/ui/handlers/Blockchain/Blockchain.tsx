@@ -4,7 +4,8 @@ import {Block} from "../../../blockchain/Block.ts";
 import {RealtimeContext, useEvent} from "../Realtime/RealtimeContext.ts";
 import {
     addAccountBalances,
-    computeBlock, ComputedBlock,
+    computeBlock,
+    ComputedBlock,
     genesisBlock,
     getBlockChains,
     getContainingChain,
@@ -20,14 +21,14 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
     const [strict, setStrict] = useState(true);
     const [withholdBlocks, setWithholdBlocks] = useState(false)
     const [withheldBlocks, setWithheldBlocks] = useState<ComputedBlock[]>([])
-    
+
     const addWithoutDouble = (block: ComputedBlock, setter: Dispatch<SetStateAction<ComputedBlock[]>>) => setter(blocks => {
         if (blocks.some(b => b.hash === block.hash)) return blocks;
         return [...blocks, block]
     })
     const sendBlock = async (block: Block) => {
         const real = await addBlock(block);
-        if(withholdBlocks) addWithoutDouble(real, setWithheldBlocks)
+        if (withholdBlocks) addWithoutDouble(real, setWithheldBlocks)
         else send("block", block);
     }
     const addBlock = async (block: Block) => {
@@ -36,7 +37,7 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
         return real;
     }
     useEffect(() => {
-        if(!withholdBlocks && withheldBlocks.length) {
+        if (!withholdBlocks && withheldBlocks.length) {
             setWithheldBlocks(blocks => {
                 blocks.forEach(block => send("block", uncomputeBlock(block)));
                 return [];
@@ -59,7 +60,19 @@ export const Blockchain: FC<PropsWithChildren> = ({children}) => {
     })
 
     return <BlockchainContext.Provider
-        value={{selectedBlock, setSelectedBlock, blocks, currentChain, chains, strict, setStrict, sendBlock, withholdBlocks, setWithholdBlocks, withheldBlocks}}
+        value={{
+            selectedBlock,
+            setSelectedBlock,
+            blocks,
+            currentChain,
+            chains,
+            strict,
+            setStrict,
+            sendBlock,
+            withholdBlocks,
+            setWithholdBlocks,
+            withheldBlocks
+        }}
     >
         {children}
     </BlockchainContext.Provider>

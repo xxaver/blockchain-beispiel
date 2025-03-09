@@ -6,7 +6,7 @@ export type Signed = {
     publicKey: string;
 }
 
-export const verify = async <T>(signed: Signed): Promise<false | (T & {from: string})> => {
+export const verify = async <T>(signed: Signed): Promise<false | (T & { from: string })> => {
     try {
         const text = new TextEncoder().encode(signed.data);
         const isOk = await crypto.subtle.verify(
@@ -15,10 +15,9 @@ export const verify = async <T>(signed: Signed): Promise<false | (T & {from: str
             str2ab(signed.signature),
             text,
         );
-        if(!isOk) return false;
+        if (!isOk) return false;
         return {...JSON.parse(signed.data), from: signed.publicKey};
-    }
-    catch {
+    } catch {
         return false;
     }
 }

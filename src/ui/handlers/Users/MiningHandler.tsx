@@ -50,7 +50,7 @@ export const MiningHandler: FC<{ user: OwnUser }> = ({user}) => {
             }))
             if (await verifyProofOfWork(block)) {
                 sendBlock(block);
-                if(changed.current) refresh(); 
+                if (changed.current) refresh();
             }
             currentPOW.current++;
         }, 1000 / user.computationalPower)

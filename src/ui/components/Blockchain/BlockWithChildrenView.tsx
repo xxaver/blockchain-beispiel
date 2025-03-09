@@ -28,7 +28,8 @@ export const BlockWithChildrenView: FC<{
             <BlockView selected={selected} block={block.block}/>
         </div>
         <div>
-            {block.children.map((child, i) => <BlockWithChildrenView selected={selected} key={i} prevRef={ref} block={child}/>)}
+            {block.children.map((child, i) => <BlockWithChildrenView selected={selected} key={i} prevRef={ref}
+                                                                     block={child}/>)}
         </div>
     </div>
 }

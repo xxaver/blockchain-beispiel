@@ -9,7 +9,7 @@ export const Create: FC = () => {
     const [anonKey, setAnonKey] = useState("")
 
     const [qrCode, setQRCode] = useState<string | null>(null)
-    
+
     const normalUrl = `/${encodeURIComponent(channel || "blockchain")}/${encodeURIComponent(baseURL)}/${encodeURIComponent(anonKey)}`
     const url = `${location.origin}${basePath}${normalUrl}`
 

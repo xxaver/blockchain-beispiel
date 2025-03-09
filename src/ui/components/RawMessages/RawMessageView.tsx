@@ -7,7 +7,7 @@ import {knownEvents} from "../../handlers/Realtime/events.ts";
 import {wholeJson} from "../../util.ts";
 import {LayoutProps} from "../../layout/LayoutContext.tsx";
 
-export const RawMessageView: FC<LayoutProps<Message> & {onlyTitle?: boolean}> = ({onlyTitle, props: message}) => {
+export const RawMessageView: FC<LayoutProps<Message> & { onlyTitle?: boolean }> = ({onlyTitle, props: message}) => {
     const {event, payload} = message;
 
     const validator = knownEvents[event];

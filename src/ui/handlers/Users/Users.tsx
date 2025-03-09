@@ -32,7 +32,7 @@ export const Users: FC<PropsWithChildren> = ({children}) => {
     useEffect(() => {
         localStorage.setItem(storageKey, JSON.stringify(ownUsers))
     }, [ownUsers]);
-    
+
     return <UsersContext.Provider value={{
         knownUsers: [...ownUsers, ...knownUsers.filter(e => !ownUsers.some(o => o.publicKey === e.publicKey))],
         ownUsers,

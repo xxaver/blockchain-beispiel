@@ -134,7 +134,7 @@ export const BlockchainView: FC = () => {
         </div>
     </TransformWrapper>
 }
-const Controls: FC<{scroll: () => void}> = ({scroll}) => {
+const Controls: FC<{ scroll: () => void }> = ({scroll}) => {
     const {zoomIn, zoomOut, resetTransform} = useControls();
     const [zoom, setZoom] = useState(1);
     useTransformEffect(({state}) => setZoom(state.scale))

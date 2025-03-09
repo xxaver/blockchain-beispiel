@@ -25,7 +25,10 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
             <tr>
                 <td>Empfänger:</td>
                 <td className="py-2">
-                    <SuggestionInput suggestions={knownUsers.map(user => ({element: user.name, searchable: [user.publicKey, user.name]}))}
+                    <SuggestionInput suggestions={knownUsers.map(user => ({
+                        element: user.name,
+                        searchable: [user.publicKey, user.name]
+                    }))}
                                      placeholder="Public Key" className={"w-full " + (toOk ? "" : " invalid")}
                                      type="text" ref={to}/>
                 </td>
@@ -40,7 +43,8 @@ export const MakeTransaction: FC<{ user: OwnUser }> = ({user}) => {
             <tr>
                 <td>Gebühr:</td>
                 <td className="py-2">
-                    <input placeholder="Beschleunigt Verarbeitung" className={"w-full " + (feeOk ? "" : " invalid")} type="number" value={fee}
+                    <input placeholder="Beschleunigt Verarbeitung" className={"w-full " + (feeOk ? "" : " invalid")}
+                           type="number" value={fee}
                            onChange={e => setFee(e.target.value)}/>
                 </td>
             </tr>

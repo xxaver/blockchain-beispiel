@@ -13,7 +13,7 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
     const [chosen, setChosen] = useState<SignedTransaction[]>([]);
     const [auto, setAuto] = useState(true);
     const block = useLastBlock();
-    
+
     useEvent("transaction", (signed: Signed) => {
         verify<Transaction>(signed).then(valid => {
             const transaction = parseJSON(signed.data);

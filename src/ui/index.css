@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @tailwind utilities;
 
 body, html, #root {
@@ -13,13 +14,16 @@ input {
   border: 1px solid #d1d1d1;
   transition: all .2s;
 }
+
 input:focus {
   @apply border-blue-700;
   outline: none;
 }
+
 input.invalid {
     @apply border-red-600;
 }
+
 .primary {
   text-align: center;
   color: white;
@@ -29,25 +33,31 @@ input.invalid {
   cursor: pointer;
   border-radius: 5px;
 }
+
 .primary:not(:disabled):hover {
   @apply bg-blue-700;
 }
+
 .primary:not(:disabled):active {
   @apply bg-blue-900;
 }
+
 button {
   padding: 5px;
   transition: all .3s;
   cursor: pointer;
   @apply rounded-md;
 }
+
 button:disabled {
   cursor: default;
   opacity: .5;
 }
+
 button:not(:disabled):hover {
   @apply bg-gray-200;
 }
+
 button:not(:disabled):active {
   @apply bg-gray-300;
 }
@@ -55,35 +65,45 @@ button:not(:disabled):active {
 .toggle {
   @apply px-2 py-1.5 rounded-md
 }
+
 .toggle.toggled {
   @apply bg-blue-200 text-blue-600
 }
+
 .toggle.toggled:hover {
   @apply bg-blue-300
 }
+
 .toggle.untoggled {
   @apply bg-red-200 text-red-600
 }
+
 .toggle.untoggled:hover {
   @apply bg-red-300
 }
+
 .item {
   transition: all .3s;
   background-color: white;
   cursor: pointer;
 }
+
 .item:hover {
   filter: brightness(80%);
 }
+
 .item:active {
   filter: brightness(60%);
 }
+
 textarea {
-  @apply  rounded-lg p-2 bg-gray-100;
+  @apply rounded-lg p-2 bg-gray-100;
 }
+
 .circle {
   @apply rounded-[100%] flex items-center text-center justify-center w-5 h-5 bg-blue-300 text-blue-700
 }
+
 .react-transform-wrapper, .react-transform-component {
   height: 100%;
   width: 100%;
@@ -92,6 +112,7 @@ textarea {
 .lm_splitter {
   z-index: 35 !important;
 }
+
 body, html {
   overflow: hidden;
 }

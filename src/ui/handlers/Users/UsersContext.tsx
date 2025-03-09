@@ -6,13 +6,14 @@ export interface KnownUser {
     publicKey: string;
     computationalPower: number;
 }
+
 export interface OwnUser extends KnownUser {
     privateKey: string;
     workingOn?: Block
 }
 
-export const UsersContext = createContext<null | { 
-    knownUsers: (KnownUser | OwnUser)[]; 
+export const UsersContext = createContext<null | {
+    knownUsers: (KnownUser | OwnUser)[];
     ownUsers: OwnUser[];
     setOwnUsers: Dispatch<SetStateAction<OwnUser[]>>;
 }>(null)

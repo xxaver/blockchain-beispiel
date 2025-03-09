@@ -13,6 +13,7 @@ export const Start: FC = () => {
     }, []);
 
     return defaultConfig ?
-        <Navigate replace to={`/${encodeURIComponent(defaultConfig.channel)}/${encodeURIComponent(defaultConfig.url)}/${encodeURIComponent(defaultConfig.key)}`}/> :
+        <Navigate replace
+                  to={`/${encodeURIComponent(defaultConfig.channel)}/${encodeURIComponent(defaultConfig.url)}/${encodeURIComponent(defaultConfig.key)}`}/> :
         <Create/>
 }

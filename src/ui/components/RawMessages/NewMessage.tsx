@@ -22,14 +22,14 @@ export const NewMessage: FC<{ close: () => void }> = ({close}) => {
             <SuggestionInput ref={event} suggestions={Object.keys(knownEvents).map(e => ({
                 element: e,
                 searchable: [e]
-            }))} placeholder="Event" className="w-full" />
-        <textarea
-            onChange={e => setValue(e.target.value)}
-            onBlur={() => {
-                if (!error) setValue(JSON.stringify(JSON.parse(value), null, 3))
-            }}
-            className="resize-none h-full w-full rounded-lg p-2 bg-gray-100 font-mono"
-            value={value}/>
+            }))} placeholder="Event" className="w-full"/>
+            <textarea
+                onChange={e => setValue(e.target.value)}
+                onBlur={() => {
+                    if (!error) setValue(JSON.stringify(JSON.parse(value), null, 3))
+                }}
+                className="resize-none h-full w-full rounded-lg p-2 bg-gray-100 font-mono"
+                value={value}/>
         </div>
         <div className="p-2 flex items-center">
             <div className="grow text-red-600 gap-2 items-center flex">
