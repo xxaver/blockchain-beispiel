@@ -1,7 +1,7 @@
 import {FC, useContext, useEffect} from "react";
 import {OwnUser, removePrivateKey, UsersContext, useUser} from "../../handlers/Users/UsersContext.tsx";
 import {AccountTitle} from "./AccountTitle.tsx";
-import {ArrowLeftRight, HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
+import {HandCoins, LockKeyhole, LockKeyholeOpen, Pencil, Pickaxe, Trash2} from "lucide-react";
 import {Accordeon} from "../Accordeon.tsx";
 import {RealtimeContext} from "../../handlers/Realtime/RealtimeContext.ts";
 import {produce, WritableDraft} from "immer";
@@ -27,7 +27,7 @@ export const AccountView: FC<LayoutProps<string>> = ({props: publicKey, close}) 
     }
 
     useEffect(() => {
-        if(!user) close();
+        if (!user) close();
     }, [user]);
 
     if (!user) return null;
@@ -70,8 +70,6 @@ export const AccountView: FC<LayoutProps<string>> = ({props: publicKey, close}) 
         <Accordeon noPadding open title={<><Pickaxe/> Mining</>}>
             <MiningView publicKey={publicKey}/>
         </Accordeon>
-        <Accordeon noPadding title={<><ArrowLeftRight/> Transaktionen</>}>
-            <AccountTransactions publicKey={publicKey}/>
-        </Accordeon>
+        <AccountTransactions publicKey={publicKey}/>
     </>
 }

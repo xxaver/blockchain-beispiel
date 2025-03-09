@@ -1,16 +1,16 @@
 import {FC, PropsWithChildren, useContext} from "react";
 import {LayoutProps} from "../../layout/LayoutContext.tsx";
-import {Transaction, TransactionState} from "../../../blockchain/Transaction.ts";
+import {Transaction} from "../../../blockchain/Transaction.ts";
 import {useUsername} from "../../handlers/Users/UsersContext.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 import {DragOpener} from "../../layout/DragOpener.tsx";
 import {Accordeon} from "../Accordeon.tsx";
 import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
-import {isTransactionIncluded} from "../../../blockchain/BlockChain.ts";
+import {getTransactionProcessedState} from "../../../blockchain/BlockChain.ts";
 import {finality} from "../../config.ts";
 import {transactionStateItemMapping, transactionStateTextMapping} from "./TransactionStateItemMapping.tsx";
-import {Cpu} from "lucide-react";
+import {Pickaxe} from "lucide-react";
 
 export const TransactionListItem: FC<PropsWithChildren<{ transaction: Transaction; color?: string }>> =
     ({transaction, color, children}) => {
@@ -34,9 +34,7 @@ export const TransactionListItem: FC<PropsWithChildren<{ transaction: Transactio
     }
 export const TransactionDetails: FC<LayoutProps<Transaction>> = ({props: transaction}) => {
     const {currentChain} = useContext(BlockchainContext)!
-    const index = currentChain.findIndex(b => isTransactionIncluded(b, transaction))
-    const depth = currentChain.length - index;
-    const state = index >= 0 ? (depth >= finality? TransactionState.Final : TransactionState.Processed) : null;
+    const [state, depth] = getTransactionProcessedState(currentChain, transaction);
 
     const from = useUsername(transaction.from)
     const to = useUsername(transaction.to)
@@ -71,7 +69,7 @@ export const TransactionDetails: FC<LayoutProps<Transaction>> = ({props: transac
                     {transactionStateItemMapping[state]}
                     {transactionStateTextMapping[state]}
                 </> : <>
-                    <Cpu/>
+                    <Pickaxe className="text-red-600"/>
                     Wird verarbeitet
                 </>}
             </div>

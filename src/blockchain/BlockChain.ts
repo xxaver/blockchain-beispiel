@@ -1,8 +1,8 @@
 import {Block, getBlockHash, ProofOfWork, verifyProofOfWork} from "./Block.ts";
-import {Transaction} from "./Transaction.ts";
+import {Transaction, TransactionState} from "./Transaction.ts";
 import {parseJSON} from "../ui/util.ts";
 import {Signed, verify} from "./Signed.ts";
-import {maxTransactions} from "../ui/config.ts";
+import {finality, maxTransactions} from "../ui/config.ts";
 
 export const genesisBlock: ComputedBlock = {
     id: 0,
@@ -115,10 +115,17 @@ export const applyTransactions = (balances: Record<string, number>, transactions
     return balances;
 }
 
+export const getTransactionProcessedState = (chain: ComputedBlock[], transaction: Transaction): [TransactionState | null, number] => {
+    const index = chain.findIndex(b => isTransactionIncluded(b, transaction))
+    const depth = chain.length - index;
+    const state = index >= 0 ? (depth >= finality ? TransactionState.Final : TransactionState.Processed) : null;
+    return [state, depth];
+}
+
 export const isTransactionIncluded = (block: ComputedBlock, transaction: Transaction) => {
     return block.transactions.some(t => {
-        for(const key in transaction) {
-            if(t[key as keyof Transaction] !== transaction[key as keyof Transaction]) return false;
+        for (const key in transaction) {
+            if (t[key as keyof Transaction] !== transaction[key as keyof Transaction]) return false;
         }
         return true;
     })
