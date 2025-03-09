@@ -6,3 +6,11 @@ export interface Transaction {
     fee: number;
     message: string;
 }
+
+export enum TransactionState {
+    Double,
+    Valid,
+    NotSigned,
+    Overspent,
+    Invalid
+}

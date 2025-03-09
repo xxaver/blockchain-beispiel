@@ -55,7 +55,7 @@ export const MempoolView: FC = () => {
         <div
             className="grow min-h-0 overflow-auto">
             {categories.map((category, key) => <div className={key ? "border-t border-gray-200" : ""} key={key}>
-                <Accordeon noPadding open={key < categories.length - 1} title={<>
+                <Accordeon noPadding open={key < 2} title={<>
                     {category.title}
                     {key === 0 && category.data.length > maxTransactions &&
                         <div className="bg-red-600 text-white rounded-xl py-1 px-2">max {maxTransactions}</div>}
@@ -71,7 +71,7 @@ export const MempoolView: FC = () => {
                     {category.data.map((transaction) => <TransactionListItem
                         key={JSON.stringify(transaction)}
                         transaction={transaction.transaction}>
-                        <MempoolTransactionView transaction={transaction} />
+                        <MempoolTransactionView withValid={key === 0} transaction={transaction} />
                     </TransactionListItem>)}
                 </Accordeon></div>)}
         </div>

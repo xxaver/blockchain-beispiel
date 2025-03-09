@@ -1,19 +1,19 @@
-import {FC, PropsWithChildren, ReactNode, useEffect, useMemo, useState} from "react";
-import {isGenerallyValid, MempoolContext, SignedTransaction, TransactionStatus} from "./MempoolContext.ts";
+import {FC, PropsWithChildren, useEffect, useMemo, useState} from "react";
+import {AssignedTransactionState, isGenerallyValid, MempoolContext, SignedTransaction} from "./MempoolContext.ts";
 import {useEvent} from "../Realtime/RealtimeContext.ts";
 import {Signed, verify} from "../../../blockchain/Signed.ts";
 import {parseJSON, sortedIndex} from "../../util.ts";
-import {Transaction} from "../../../blockchain/Transaction.ts";
+import {Transaction, TransactionState} from "../../../blockchain/Transaction.ts";
 import {useLastBlock} from "../Blockchain/BlockchainContext.ts";
 import {maxTransactions} from "../../config.ts";
 import {applyTransactions} from "../../../blockchain/BlockChain.ts";
-import {Layers2, PiggyBank, ShieldX, Signature} from "lucide-react";
 
 export const Mempool: FC<PropsWithChildren> = ({children}) => {
     const [mempool, setMempool] = useState<SignedTransaction[]>([]);
     const [chosen, setChosen] = useState<SignedTransaction[]>([]);
     const [auto, setAuto] = useState(true);
     const block = useLastBlock();
+    
     useEvent("transaction", (signed: Signed) => {
         verify<Transaction>(signed).then(valid => {
             const transaction = parseJSON(signed.data);
@@ -72,21 +72,20 @@ export const Mempool: FC<PropsWithChildren> = ({children}) => {
     const chosenStatus = useMemo(() => {
         const balances = {...block.balances};
         const allTransactions = [...block.pastTransactions];
-        const status: TransactionStatus[] = [];
+        const status: AssignedTransactionState[] = [];
 
         for (const t of selected) {
             const {transaction} = t;
-            let icon: ReactNode;
-            if (transaction.fee < 0 || transaction.amount < 0) icon = <ShieldX className="text-red-600"/>;
-            else if (!t.isSigned) icon = <Signature className="text-red-600"/>
-            else if (isDouble(transaction, allTransactions)) icon = <Layers2 className="text-red-600"/>
-            else if ((balances[transaction.from] || 0) < transaction.amount + transaction.fee) icon =
-                <PiggyBank className="text-red-600"/>
+            let state = TransactionState.Valid;
+            if (transaction.fee < 0 || transaction.amount < 0) state = TransactionState.Invalid;
+            else if (!t.isSigned) state = TransactionState.NotSigned
+            else if (isDouble(transaction, allTransactions)) state = state = TransactionState.Double
+            else if ((balances[transaction.from] || 0) < transaction.amount + transaction.fee) state = state = TransactionState.Overspent
             else {
                 applyTransactions(balances, [transaction]);
                 allTransactions.push(transaction);
             }
-            if (icon) status.push({transaction: t, icon})
+            status.push({transaction: t, state})
         }
         return status;
     }, [selected, block]);

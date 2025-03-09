@@ -1,6 +1,6 @@
-import {createContext, Dispatch, ReactNode, SetStateAction} from "react";
+import {createContext, Dispatch, SetStateAction} from "react";
 import {Signed, verify} from "../../../blockchain/Signed.ts";
-import {Transaction} from "../../../blockchain/Transaction.ts";
+import {Transaction, TransactionState} from "../../../blockchain/Transaction.ts";
 import {parseJSON} from "../../util.ts";
 
 export interface SignedTransaction {
@@ -9,15 +9,16 @@ export interface SignedTransaction {
     isSigned: boolean;
     random: number;
 }
-export interface TransactionStatus {
-    icon: ReactNode;
+
+export interface AssignedTransactionState {
+    state: TransactionState;
     transaction: SignedTransaction;
 }
 
 export const MempoolContext = createContext<null | {
     mempool: SignedTransaction[];
     valid: SignedTransaction[];
-    chosenStatus: TransactionStatus[];
+    chosenStatus: AssignedTransactionState[];
     double: SignedTransaction[];
     notSigned: SignedTransaction[];
     overspent: SignedTransaction[];
