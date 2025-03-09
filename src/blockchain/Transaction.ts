@@ -8,6 +8,9 @@ export interface Transaction {
 }
 
 export enum TransactionState {
+    Final,
+    Processed,
+    
     Double,
     Valid,
     NotSigned,

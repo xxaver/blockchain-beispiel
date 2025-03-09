@@ -1,11 +1,16 @@
-import {FC, PropsWithChildren} from "react";
+import {FC, PropsWithChildren, useContext} from "react";
 import {LayoutProps} from "../../layout/LayoutContext.tsx";
-import {Transaction} from "../../../blockchain/Transaction.ts";
+import {Transaction, TransactionState} from "../../../blockchain/Transaction.ts";
 import {useUsername} from "../../handlers/Users/UsersContext.tsx";
 import {CurrentCoins} from "../Accounts/CurrentCoins.tsx";
 import {DragOpener} from "../../layout/DragOpener.tsx";
 import {Accordeon} from "../Accordeon.tsx";
 import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
+import {BlockchainContext} from "../../handlers/Blockchain/BlockchainContext.ts";
+import {isTransactionIncluded} from "../../../blockchain/BlockChain.ts";
+import {finality} from "../../config.ts";
+import {transactionStateItemMapping, transactionStateTextMapping} from "./TransactionStateItemMapping.tsx";
+import {Cpu} from "lucide-react";
 
 export const TransactionListItem: FC<PropsWithChildren<{ transaction: Transaction; color?: string }>> =
     ({transaction, color, children}) => {
@@ -28,6 +33,11 @@ export const TransactionListItem: FC<PropsWithChildren<{ transaction: Transactio
         </DragOpener>
     }
 export const TransactionDetails: FC<LayoutProps<Transaction>> = ({props: transaction}) => {
+    const {currentChain} = useContext(BlockchainContext)!
+    const index = currentChain.findIndex(b => isTransactionIncluded(b, transaction))
+    const depth = currentChain.length - index;
+    const state = index >= 0 ? (depth >= finality? TransactionState.Final : TransactionState.Processed) : null;
+
     const from = useUsername(transaction.from)
     const to = useUsername(transaction.to)
 
@@ -54,5 +64,23 @@ export const TransactionDetails: FC<LayoutProps<Transaction>> = ({props: transac
             <div className="grow">Nachricht:</div>
             {transaction.message}
         </div>
+        <div className="flex items-center p-2">
+            <div className="grow">Status:</div>
+            <div className="flex items-center gap-2">
+                {state !== null ? <>
+                    {transactionStateItemMapping[state]}
+                    {transactionStateTextMapping[state]}
+                </> : <>
+                    <Cpu/>
+                    Wird verarbeitet
+                </>}
+            </div>
+        </div>
+        {state !== null && <div className="flex items-center p-2">
+            <div className="grow">Blocktiefe:</div>
+            <div className="flex items-center gap-2">
+                {depth} / {finality}
+            </div>
+        </div>}
     </div>
 }

@@ -36,7 +36,7 @@ export interface BlockChainBlock {
 }
 
 export const computeBlock = async (block: Block): Promise<ComputedBlock> => {
-    if(block.id === 0) return genesisBlock;
+    if (block.id === 0) return genesisBlock;
     return ({
         ...block,
         hash: await getBlockHash(block),
@@ -66,7 +66,7 @@ export const addAccountBalances = (block: BlockChainBlock, balances: Record<stri
     block.block.balances = {...balances};
     block.block.pastTransactions = [...pastTransactions];
     block.block.balances[block.block.mined.publicKey] = (block.block.balances[block.block.mined.publicKey] || 0) + 1;
-    if(block.block.transactions.length > maxTransactions) block.block.transactionsValid = false;
+    if (block.block.transactions.length > maxTransactions) block.block.transactionsValid = false;
     for (const transaction of block.block.transactions) {
         if (transaction.amount < 0
             || transaction.fee < 0
@@ -92,13 +92,13 @@ export const addAccountBalances = (block: BlockChainBlock, balances: Record<stri
     return block;
 }
 
-export const getMaxChain = (block: BlockChainBlock, check=true): ComputedBlock[] => {
+export const getMaxChain = (block: BlockChainBlock, check = true): ComputedBlock[] => {
     const all = block.children.filter(child => !check || (child.block.transactionsValid && child.block.proofOfWorkValid)).map(e => getMaxChain(e, check));
     if (!all.length) return [block.block];
     const max = Math.max(...all.map(e => e.length));
     return [block.block, ...all.find(e => e.length === max)!];
 }
-export const getContainingChain = (block: BlockChainBlock, searchHash: string, strict=false): ComputedBlock[] | null => {
+export const getContainingChain = (block: BlockChainBlock, searchHash: string, strict = false): ComputedBlock[] | null => {
     if (block.block.hash === searchHash) return strict ? [block.block] : getMaxChain(block, false);
     for (let i = 0; i < block.children.length; i++) {
         const chain = getContainingChain(block.children[i], searchHash, strict);
@@ -113,4 +113,13 @@ export const applyTransactions = (balances: Record<string, number>, transactions
         balances[t.to] = (balances[t.to] || 0) + t.amount;
     })
     return balances;
-} 
+}
+
+export const isTransactionIncluded = (block: ComputedBlock, transaction: Transaction) => {
+    return block.transactions.some(t => {
+        for(const key in transaction) {
+            if(t[key as keyof Transaction] !== transaction[key as keyof Transaction]) return false;
+        }
+        return true;
+    })
+}
