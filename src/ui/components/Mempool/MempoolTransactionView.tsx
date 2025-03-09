@@ -3,7 +3,7 @@ import {MempoolContext, SignedTransaction} from "../../handlers/Mempool/MempoolC
 import {TransactionTitle} from "../RawMessages/TransactionItem.tsx";
 import {Check, Coins, MinusCircle, PlusCircle} from "lucide-react";
 
-export const TransactionView: FC<{ transaction: SignedTransaction; withValid?: boolean }> = 
+export const MempoolTransactionView: FC<{ transaction: SignedTransaction; withValid?: boolean }> = 
     ({transaction, withValid}) => {
     const {chosen, setChosen, auto, chosenStatus} = useContext(MempoolContext)!;
     const included = chosen.includes(transaction);
