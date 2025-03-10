@@ -27,7 +27,7 @@ export const TransactionListItem: FC<PropsWithChildren<{ transaction: Transactio
             <div className="item">
                 <div
                     className={`flex items-center gap-2 p-2  ${color || "bg-yellow-600/20 text-yellow-600"}`}>
-                    {children || <TransactionTitle transaction={transaction}/>}
+                    {children || <TransactionTitle withFee transaction={transaction}/>}
                 </div>
             </div>
         </DragOpener>

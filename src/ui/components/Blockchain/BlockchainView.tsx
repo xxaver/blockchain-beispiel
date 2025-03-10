@@ -111,7 +111,7 @@ export const BlockchainView: FC = () => {
             </button>
         </div>
         <div
-            className="grow relative min-h-0 flex items-stretch justify-stretch"
+            className="grow relative min-h-0 flex items-stretch justify-stretch overflow-auto"
         >
             {scrollable && <div
                 style={{writingMode: "vertical-rl"}}

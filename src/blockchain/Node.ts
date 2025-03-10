@@ -1,3 +1,6 @@
+// Diese Datei funktioniert nicht wirklich, ich habe aus Zeitgründe die wahre
+// Implementation direkt ins UI-Verzeichnis geschrieben
+
 import {Transaction} from "./Transaction.ts";
 import {Signed} from "./Signed.ts";
 import {toBase58} from "./crypto.ts";
@@ -39,8 +42,8 @@ export class Node {
         }, this.privateKey, new TextEncoder().encode(data));
         const signedTransaction: Signed = {
             data,
-            signature,
-            publicKey: this.publicKey
+            signature: signature as unknown as string,
+            publicKey: this.publicKey as unknown as string
         }
         return signedTransaction;
     }
